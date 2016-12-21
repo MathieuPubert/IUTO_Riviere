@@ -1,36 +1,100 @@
-# construit une nouvelle grille hexagonale.
-# Cette grille contiendra nbLig lignes, nbCol colonnes.
-# si paire est à True la grille sera paire sinon elle sera impaire
-# valeur sera la valeur par défaut stockée dans chaque case de la grille
+# -*- coding:UTF-8 -*-
+from case.py import *
+
+
 def GrilleHexa(nbLig,nbCol,paire=True,valeur=None):
-    pass
+    """
+    Grille de cases hexagonales
+    :param nbLig: integer. Nombre de lignes de la grille
+    :param nbCol: integer. Nombre d ecolonnes de la grille
+    :param paire: bool. Les lignes paires contiennent les colonnes paires
+    :param valeur: Valeur par défaut des cases de la grille
+    :return: dictionnaire. {'lignes':nbLig, 'colonnes':nbCol, 'estPaire':paire, '(0,0):None'}
+    """
+    d_grille={'lignes':nbLig,
+              'colonnes': nbCol,
+              'estPaire':paire}
 
-# retourne le nombre de lignes de la grille
+    for x in range(nbLig):
+        for y in range(nbCol):
+
+            if d_grille['estPaire'] and x%2==y%2: #Si paire est True et x, y pairs/impairs ensemble
+                d_grille[(x,y)]=valeur
+
+            elif not d_grille['estPaire'] and x%2!=y%2:
+                d_grille[(x,y)]=valeur
+
+            else:
+                d_grille[(x,y)]="WTF???"
+
+    return d_grille
+
 def getNbLigGH(grille):
-    pass
+    """
+    Donne le nombre de lignes de la grille
+    :param grille: retour de la fonction GrilleHexa
+    :return: integer. Nombre de lignes de grille
+    """
+    return grille['lignes']
 
-# retourne le nombre de colonnes de la grille
+
 def getNbColGH(grille):
-    pass
+    """
+    Donne le nombre de colonnes de la grille
+    :param grille: retour de la fonction GrilleHexa
+    :return: integer. Nombre de colonnes de grille
+    """
+    return grille['colonnes']
 
-# indique si la grille est paire ou impaire
 def estPaireGH(grille):
-    pass
+    """
+    Indique si la grille est paire
+    :param grille: retour de la fonction GrilleHexa
+    :return: bool. True si la grille est paire
+    """
+    return grille['estPaire']
 
-# vérifie si une position est bien une position de la grille
-# par exemple si la grille est paire, lig vaut 2 et col vaut 3 
-# la fonction retourne False car il n'y a pas de colonne 3 dans une ligne
-# de numéro paire d'une grille paire
 def estPosGH(grille,lig,col):
-    pass
+    """
+    Indique si une position fait partie de la grille par exemple si la grille est paire, lig vaut 2 et col vaut 3
+    la fonction retourne False car il n'y a pas de colonne 3 dans une ligne
+    :param grille: retour de la fonction GrilleHexa
+    :param lig: integer. Indice de ligne
+    :param col: integer. Indice de colonne
+    :return: bool. True si la position est valide
+    """
+    estvalide=False
+    if (grille['estPaire'] and lig%2==col%2) or (not grille['estPaire'] and lig%2!=col%2):
+        estvalide=True
+    return estvalide
 
-# retourne la valeur qui se trouve dans la grille à la ligne lig, colonne col
+
 def getValGH(grille,lig,col):
-    pass
+    """
+    Retourne la valeur de la grille aux coordonnées (lig,col)
+    :param grille: retour de la fonction GrilleHexa
+    :param lig: integer. Indice de ligne
+    :param col: integer. Indice de colonne
+    :return: valeur de la grille à (lig,col)
+    """
+    val=None
+    if estPosGH(grille, lig, col):
+        val=grille[(lig,col)]
+    return val
 
 # met la valeur val dans la grille à la la ligne lig, colonne col
 def setValGH(grille,lig,col,val):
-    pass
+    """
+    Affecte la valeur de la grille aux coordonnées (lig,col)
+    :param grille: retour de la fonction GrilleHexa
+    :param lig: integer. Indice de ligne
+    :param col: integer. Indice de colonne
+    :param val: valeur à affecter.
+    :return: None. Modifie la grille
+    """
+    if estPosGH(grille, lig, col):
+        grille[(lig,col)]=val
+
 
 # retourne un couple d'entier qui indique de combien de ligne et de combien
 # de colonnes il faut se déplacer pour aller dans une direction.
@@ -40,14 +104,49 @@ def setValGH(grille,lig,col,val):
 # il faut remonter d'une ligne et aller une colonne vers la droite
 # Cette fonction vous sera utile pour la fonction suivante.
 def incDirectionGH(direction):
-    pass
+    """
+    Donne un vecteur mouvement (+x,+y) à appliquer a des coordonnées pour un deplacement
+    :param direction: string. sens du déplacement
+    :return: tuple. (+x, +y). renvoie un vecteur (0,0) si la direction est inexistante
+    """
+    d_modificateurs={'N':(-2,0),
+                     'NE':(-1,1),
+                     'E':(0,2),
+                     'SE':(1,1),
+                     'S':(2,0),
+                     'SW':(-1,1),
+                     'W':(-2,0),
+                     'NW':(-1,-1)}
 
-# permet de retourner la liste des n valeurs qui se trouvent dans le grille
-# dans une direction donnée à partir de la position lig,col
-# si il y a moins n celulles dans la grille dans la direction données on retourne
-# toutes le cellules trouvées
+    return d_modificateurs.get(direction, (0,0))
+
+
 def getNProchainsGH(grille,lig,col,direction,n=3):
-    pass
+    """
+    Permet de retourner la liste des n valeurs qui se trouvent dans la grille
+    dans une direction donnée à partir de la position lig,col
+    si il y a moins n celulles dans la grille dans la direction données on retourne
+    toutes le cellules trouvées
+    :param grille: retour de la fonction GrilleHexa
+    :param lig: integer. Indice de ligne
+    :param col: integer. Indice de colonne
+    :param direction: string. Clé du dictionnaire directions
+    :param n: integer. Nombre de cases maximum à retourner
+    :return: liste. [d_grille[(x1,y1)],d_grille[(x2,y2)],d_grille[(x3,y3)]]
+    """
+    l_valeurs=[]
+    vx,vy=incDirectionGH(direction) #je récupère le vecteur mouvement
+    for i in range(n):
+        # Calcul de la valeur de la cellule aux coordonnées :
+        # x= position initiale +  abscisse vecteur mouvement*pas
+        # y= position initiale +  ordonnées vecteur mouvement*pas
+        # Si les coordonnées n'existent pas, je ne rentre rien dans la liste
+        valeur= d_grille.get((lig+(i*vx),col+(i*vy)),None)
+        if valeur is not None:
+            l_valeurs.append(valeur)
+
+    return l_valeurs
+
 
 # fonction d'initiation d'une grille avec des caractères pour faire des tests
 # la grille doit être créée
@@ -72,7 +171,7 @@ def afficheGH(grille):
     nbLig=getNbLigGH(grille)
     nbCol=getNbColGH(grille)
     if estPaireGH(grille):
-        print(" ",end='')
+        print(" ", end='')
         debut=0
     else:
         debut=1
@@ -105,3 +204,13 @@ def afficheGH(grille):
     for j in range(debut,getNbColGH(grille)-2,2):
         print('_/ \\',end='')
     print('_/')
+
+
+
+########################################################################################################################
+#TESTS
+########################################################################################################################
+
+if __name__=='__main__':
+    grille=GrilleHexa(10,10,True,Case())
+    afficheGH(grille)
