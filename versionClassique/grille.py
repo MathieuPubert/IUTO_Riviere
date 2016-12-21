@@ -165,7 +165,11 @@ def initAlphaGH(grille):
             setValGH(i,j,possible[k])
             k=(k+1)%len(l)
         dec=(dec+1)%2
-            
+
+
+
+
+################################################################# FONCTION SEMBLE ERRONNEE #############################
 # affichage en mode texte d'une grille hexagonale        
 def afficheGH(grille):
     nbLig=getNbLigGH(grille)
@@ -205,7 +209,7 @@ def afficheGH(grille):
         print('_/ \\',end='')
     print('_/')
 
-
+########################################################################################################################
 
 ########################################################################################################################
 #TESTS
