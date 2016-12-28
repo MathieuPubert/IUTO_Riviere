@@ -1,5 +1,5 @@
 # -*- coding:UTF-8 -*-
-from case.py import *
+from case import *
 
 
 def GrilleHexa(nbLig,nbCol,paire=True,valeur=None):
@@ -8,7 +8,7 @@ def GrilleHexa(nbLig,nbCol,paire=True,valeur=None):
     :param nbLig: integer. Nombre de lignes de la grille
     :param nbCol: integer. Nombre d ecolonnes de la grille
     :param paire: bool. Les lignes paires contiennent les colonnes paires
-    :param valeur: Valeur par défaut des cases de la grille
+    :param valeur: Valeur par défaut des cases de la grille. Idéalement une Case()
     :return: dictionnaire. {'lignes':nbLig, 'colonnes':nbCol, 'estPaire':paire, '(0,0):None'}
     """
     d_grille={'lignes':nbLig,
@@ -71,7 +71,7 @@ def estPosGH(grille,lig,col):
 
 def getValGH(grille,lig,col):
     """
-    Retourne la valeur de la grille aux coordonnées (lig,col)
+    Retourne la valeur(contenu) de la case de la grille aux coordonnées (lig,col)
     :param grille: retour de la fonction GrilleHexa
     :param lig: integer. Indice de ligne
     :param col: integer. Indice de colonne
@@ -82,7 +82,7 @@ def getValGH(grille,lig,col):
         val=grille[(lig,col)]
     return val
 
-# met la valeur val dans la grille à la la ligne lig, colonne col
+
 def setValGH(grille,lig,col,val):
     """
     Affecte la valeur de la grille aux coordonnées (lig,col)
@@ -96,13 +96,7 @@ def setValGH(grille,lig,col,val):
         grille[(lig,col)]=val
 
 
-# retourne un couple d'entier qui indique de combien de ligne et de combien
-# de colonnes il faut se déplacer pour aller dans une direction.
-# par exemple si direction vaut 'S' le retour sera (2,0) car pour se déplacer
-# vers le sud, on ne change pas de colonne par contre on passe 2 lignes
-# Si la direction est 'NE' le resultat sera (-1,1) car pour aller dans cette direction
-# il faut remonter d'une ligne et aller une colonne vers la droite
-# Cette fonction vous sera utile pour la fonction suivante.
+
 def incDirectionGH(direction):
     """
     Donne un vecteur mouvement (+x,+y) à appliquer a des coordonnées pour un deplacement
@@ -141,7 +135,7 @@ def getNProchainsGH(grille,lig,col,direction,n=3):
         # x= position initiale +  abscisse vecteur mouvement*pas
         # y= position initiale +  ordonnées vecteur mouvement*pas
         # Si les coordonnées n'existent pas, je ne rentre rien dans la liste
-        valeur= d_grille.get((lig+(i*vx),col+(i*vy)),None)
+        valeur = grille.get((lig + (i * vx), col + (i * vy)), None)
         if valeur is not None:
             l_valeurs.append(valeur)
 
@@ -152,7 +146,6 @@ def getNProchainsGH(grille,lig,col,direction,n=3):
 # la grille doit être créée
 def initAlphaGH(grille):
     possibles='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    grille["laGrille"]
     nbLig=getNbLigGH(grille)
     nbCol=getNbColGH(grille)
     if estPaireGH(grille):
@@ -162,8 +155,8 @@ def initAlphaGH(grille):
     k=0
     for i in range(nbLig):
         for j in range(dec,nbCol,2):
-            setValGH(i,j,possible[k])
-            k=(k+1)%len(l)
+            setValGH(grille, i, j, possibles[k])
+            k = (k + 1) % len(possibles)
         dec=(dec+1)%2
 
 
@@ -216,5 +209,25 @@ def afficheGH(grille):
 ########################################################################################################################
 
 if __name__=='__main__':
-    grille=GrilleHexa(10,10,True,Case())
-    afficheGH(grille)
+    print('Grille paire :')
+    grille_P = GrilleHexa(10, 10, True)
+    grille_I = GrilleHexa(5, 5, False)
+    print('Grille paire vide:')
+    afficheGH(grille_P)
+    print('Grille paire remplie:')
+    initAlphaGH(grille_P)
+    afficheGH(grille_P)
+    print('Grille paire avec valeur modifiée en (2,2):')
+    # Comportement pas joli, mais attendu. On souhaite voir le contenu de l'hexagone de la grille au coordonnées, qui est une case
+    setValGH(grille_P, 2, 2, Case('J', 'X'))
+    afficheGH(grille_P)
+
+    print('Grille impaire vide:')
+    afficheGH(grille_I)
+    print('Grille impaire remplie:')
+    initAlphaGH(grille_I)
+    afficheGH(grille_I)
+    print('Grille impaire avec valeur modifiée en (2,2), valeur absente:')
+    # Comportement pas joli, mais attendu. On souhaite voir le contenu de l'hexagone de la grille au coordonnées, qui est une case
+    setValGH(grille_I, 2, 2, Case('J', 'X'))
+    afficheGH(grille_I)
