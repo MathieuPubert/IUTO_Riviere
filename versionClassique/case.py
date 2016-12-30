@@ -1,53 +1,70 @@
-#dictionnaire associant à chaque direction le caractère qui la représente
+# Dictionnaire associant à chaque direction le caractère qui la représente
 directions={"X":" ","N":"↑","S":"↓","NO":"↖","NE":"↗","SO":"↙","SE":"↘"}
 
-#constantes représentant les rochers, les troncs, le vide
+# Constantes représentant les rochers, les troncs, le vide
 ROCHER="#"
 TRONC="T"
 VIDE=" "
 
-# création d'un case
+# Création d'un case
 def Case(contenu,courant):
-    pass
-# retourne un booléen indiquant si la case contient un rocher ou non
+    return {"contenu":contenu,"courant":courant}
+
+# Retourne un booléen indiquant si la case contient un rocher ou non
 def estRocher(case):
-    pass
-# retourne un booléen indiquant si la case contient un joueur ou non
+    res = None
+    if case["contenu"] == "#" :
+        res = True
+    else :
+        res = False
+    return res
+
+# Retourne un booléen indiquant si la case contient un joueur ou non,
 # c'est à dire autre chose que ROCHER,VIDE ou TRONC
 def estJoueur(val):
-    pass
+    res = None
+    if val["contenu"] not in ["#","T"," "] :
+        res = True
+    else : 
+        res = False
+    return res
 
-# retourne un booléen indiquant si la cas est vide ou non
+# Retourne un booléen indiquant si la cas est vide ou non
 def estVide(case):
-    pass
+    if case["contenu"] == " " :
+        return True
+    else :
+        return False
 
-# retourne le contenu de la case
+# Retourne le contenu de la case
 def getContenu(case):
-    pass
+    return case["contenu"]
 
-# retourne la direction du courant de la case
+# Retourne la direction du courant de la case,
 # c'est-à-dire une des valeurs "X", "N", "S", "NO" etc. 
 def getCourant(case):
-    pass
+    return case["courant"]
 
-
-# retourne la direction du courant de la case sous la forme
+# Retourne la direction du courant de la case sous la forme
 # d'une des flèches
 def getCourantChar(case):
-    pass
+    return directions[case["courant"]]
 
-# place un courant sur la case le courant est une des valeurs
+# Place un courant sur la case le courant est une des valeurs
 # "X", "N", "S", "NO" etc. 
 def setCourant(case,courant):
-    pass
+    case["courant"]=courant
 
-# place un objet sur une case, contenu est un caractère
-# parmiVIDE, TRONC, ROCHER ou le caractère représentant un joueur
+# Place un objet sur une case, contenu est un caractère
+# parmi VIDE, TRONC, ROCHER ou le caractère représentant un joueur
 def setContenu(case,contenu):
-    pass
+    case["contenu"]=contenu
 
-# permet simplement de récupérer la liste des directions possibles
-# il faut que votre fonction se réfère au dictionnaire directions
+# Permet simplement de récupérer la liste des directions possibles
+# Il faut que votre fonction se réfère au dictionnaire directions
 def getDirections():
-    pass
+    res=[]
+    for elem in directions.keys() :
+        res.append(elem)
+    return res
 
