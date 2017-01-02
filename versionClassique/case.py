@@ -65,7 +65,9 @@ def getContenu(case):
     :param case: tuple. Retour de la fonction Case(contenu,courant)
     :return: string ou retour de la fonction Joueur()
     """
-    contenu, _ = case
+    contenu = None
+    if case is not None:
+        contenu, _ = case
     return contenu
 
 
@@ -75,7 +77,9 @@ def getCourant(case):
     :param case: tuple. Retour de la fonction Case(contenu,courant)
     :return: string. Une des clés du dictionnaire directions
     """
-    _, courant = case
+    courant = None
+    if case is not None:
+        _, courant = case
     return courant
 
 
