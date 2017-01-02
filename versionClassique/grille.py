@@ -209,25 +209,20 @@ def afficheGH(grille):
 ########################################################################################################################
 
 if __name__=='__main__':
-    print('Grille paire :')
-    grille_P = GrilleHexa(10, 10, True)
-    grille_I = GrilleHexa(5, 5, False)
-    print('Grille paire vide:')
-    afficheGH(grille_P)
-    print('Grille paire remplie:')
-    initAlphaGH(grille_P)
-    afficheGH(grille_P)
-    print('Grille paire avec valeur modifiée en (2,2):')
-    # Comportement pas joli, mais attendu. On souhaite voir le contenu de l'hexagone de la grille au coordonnées, qui est une case
-    setValGH(grille_P, 2, 2, Case('J', 'X'))
-    afficheGH(grille_P)
+    l_grilles = [('Grille 10x10 Paire', GrilleHexa(10, 10, True)),
+                 ('Grille 10x10 Impaire', GrilleHexa(10, 10, False)),
+                 ('Grille 9x9 Paire', GrilleHexa(9, 9, True)),
+                 ('Grille 9x9 Impaire', GrilleHexa(9, 9, False))]
 
-    print('Grille impaire vide:')
-    afficheGH(grille_I)
-    print('Grille impaire remplie:')
-    initAlphaGH(grille_I)
-    afficheGH(grille_I)
-    print('Grille impaire avec valeur modifiée en (2,2), valeur absente:')
-    # Comportement pas joli, mais attendu. On souhaite voir le contenu de l'hexagone de la grille au coordonnées, qui est une case
-    setValGH(grille_I, 2, 2, Case('J', 'X'))
-    afficheGH(grille_I)
+    for nom, grille in l_grilles:
+        print('\n', nom, 'Initiatisation :')
+        afficheGH(grille)
+        print('\n', nom, 'Remplissage avec le fonction initAlphaGH')
+        initAlphaGH(grille)
+        afficheGH(grille)
+        print('\n', nom, 'Extraction de la valeur (2,2) :', getValGH(grille, 2, 2))
+        print('\n', nom, 'Remplacement de la valeur (2,2)')
+        setValGH(grille, 2, 2, Case('8', 'X'))
+        afficheGH(grille)
+        print('\n', nom, 'Extraction de la valeur (2,2) modifiée:', getValGH(grille, 2, 2))
+        print('\n', nom, 'Extraction de la valeur (2,2) et affichage API Case:', getContenu(getValGH(grille, 2, 2)))
