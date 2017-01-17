@@ -70,7 +70,9 @@ def getDirections():
     return res
 
 
+if __name__ == '__main__':
     # Obtention des informations de cases
+    l_case = []
     for case in l_case:
         print('--------------------------------------------------------------------------------')
         print('CONTENU : ', getContenu(case))
