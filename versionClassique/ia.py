@@ -1,7 +1,6 @@
 import random
 from jeu import *
 
-
 # Cette fonction retourne une grille hexgonale qui donne pour chaque case de la
 # rivière sa distance jusqu'à la case qui se trouve en lig,col
 def marquage(riviere,lig,col):
@@ -16,7 +15,7 @@ def marquage(riviere,lig,col):
         if colCpt+2>getNbColR(riviere):
             ligCpt+=1
         else:
-            colCpt+=1
+            colCpt+=2
 
 # fonction qui choisit automatiquement une direction (qui doit être une 
 # direction valide) pour le joueur courant. L'implémentation choisi aléatoirement
