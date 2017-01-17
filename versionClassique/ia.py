@@ -25,27 +25,24 @@ def choixDirection2(jeu):
     r=getRiviere(jeu)
     marque=marquage(r,getNbLigR(r),getColArrivee(r))
     (lig,col)=getPosJoueurCourant(jeu)
-    S=marque["valeurs"][lig+2][col]
-    SO=marque["valeurs"][lig+1][col-1]
-    SE=marque["valeurs"][lig+1][col+1]
-    tmp=[]
-    if verifDirection(jeu,"S")==DIRECTION_OK:
-        tmp.append(S)
-    if verifDirection(jeu,"SO")==DIRECTION_OK:
-        tmp.append(SO)
-    if verifDirection(jeu,"SE")==DIRECTION_OK:
-        tmp.append(SE)
-    if min(tmp)==S:
-        return "S"
-    if min(tmp)==SO:
-        return "SO"
-    if min(tmp)==SE:
-        return "SE"
+    listeDirectionVerif=[]
+    direction={}
+    direction["S"]=marque["valeurs"][lig+2][col]
+    direction["SO"]=marque["valeurs"][lig+1][col-1]
+    direction["SE"]=marque["valeurs"][lig+1][col+1]
+    direction["N"]=marque["valeurs"][lig-2][col]
+    direction["NE"]=marque["valeurs"][lig-1][col+1]
+    direction["NO"]=marque["valeurs"][lig-1][col-1]
+    for elem in direction:
+        if verifDirection(jeu,elem)==DIRECTION_OK:
+            listeDirectionVerif.append(direction[elem])
+    return a for a,b in direction.items() if b==min(listeDirectionVerif)
 
-#    (lig,col)=getPosJoueurCourant(jeu)
-#    r=getRiviere(jeu)
-#    aux=[]
-#    for direction in getDirections():
-#        if verifDirection(jeu,direction)==DIRECTION_OK:
-#            aux.append(direction)
-#    return random.choice(aux)
+def choixDirectionAlea(jeu):
+    (lig,col)=getPosJoueurCourant(jeu)
+    r=getRiviere(jeu)
+    aux=[]
+    for direction in getDirections():
+        if verifDirection(jeu,direction)==DIRECTION_OK:
+            aux.append(direction)
+    return random.choice(aux)
