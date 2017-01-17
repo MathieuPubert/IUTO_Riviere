@@ -10,7 +10,7 @@ def JoueursPossibles():
     """
     Représente une liste d'informations sur des joueurs qui seront utilisées pour créer des Joueurs() en jeu.
     Elle est principalement alimentée par un fichier txt.
-    :return: Dictionnaire. {'Nom Joueur': représentation}
+    :return: Dictionnaire vide. {}
     """
     return {}
 
@@ -56,9 +56,9 @@ def getNomJoueur(joueursPossibles,representation):
     Recherche un joueur par sa représentation
     :param joueursPossibles: dictionnaire. retour de JoueursPossibles()
     :param representation: string.Caractère ou chaine contenant le chemin vers le fichier image
-    :return: string. Nom du joueur, chaine vide si joueur inexistant
+    :return: string. Nom du joueur, None si joueur inexistant
     """
-    joueur = ''
+    joueur = None
     for (nom, token) in joueursPossibles.items():
         if representation == token:
             joueur = nom
