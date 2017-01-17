@@ -1,148 +1,74 @@
-#dictionnaire associant à chaque direction le caractère qui la représente
+# Dictionnaire associant à chaque direction le caractère qui la représente
 directions={"X":" ","N":"↑","S":"↓","NO":"↖","NE":"↗","SO":"↙","SE":"↘"}
 
-#constantes représentant les rochers, les troncs, le vide
+# Constantes représentant les rochers, les troncs, le vide
 ROCHER="#"
 TRONC="T"
 VIDE=" "
 
 
+# Création d'un case
 def Case(contenu,courant):
-    """
-    Case de la grille.
-    :param contenu: string. L'une des constantes ROCHER, TRONC, VIDE. Ou Joueur()
-    :param courant: string. L'une des clés du dictionnaire directions
-    :return: tuple. (contenu, courant)
-    """
-    case = None
-    if courant in directions:
-        case = (contenu, courant)
-    return case
+    return {"contenu":contenu,"courant":courant}
 
-
+# Retourne un booléen indiquant si la case contient un rocher ou non
 def estRocher(case):
-    """
-    Indique si la case contient un rocher
-    :param case: tuple. Retour de la fonction Case(contenu,courant)
-    :return: bool. True si ROCHER est le contenu de case
-    """
-    contenu, _ = case
-    return contenu == ROCHER
+    res = None
+    if case["contenu"] == "#" :
+        res = True
+    else :
+        res = False
+    return res
 
+# Retourne un booléen indiquant si la case contient un joueur ou non,
+# c'est à dire autre chose que ROCHER,VIDE ou TRONC
+def estJoueur(val):
+    res = None
+    if val["contenu"] not in ["#","T"," "] :
+        res = True
+    else : 
+        res = False
+    return res
 
-def estTronc(case):
-    """
-    Indique si la case contient un tronc
-    :param case: tuple. Retour de la fonction Case(contenu,courant)
-    :return: bool. True si VIDE est le contenu de case
-    """
-    contenu, _ = case
-    return contenu == TRONC
-
+# Retourne un booléen indiquant si la cas est vide ou non
 def estVide(case):
-    """
-    Indique si la case contient un rocher
-    :param case: tuple. Retour de la fonction Case(contenu,courant)
-    :return: bool. True si VIDE est le contenu de case
-    """
-    contenu, _ = case
-    return contenu == VIDE
+    if case["contenu"] == " " :
+        return True
+    else :
+        return False
 
-
-def estJoueur(case):
-    """
-    Indique si la case contient un Joueur
-    :param case: tuple. Retour de la fonction Case(contenu,courant)
-    :return: bool. True si le contenu de case n'est ni VIDE, ROCHER ou TRONC
-    """
-    contenu, _ = case
-    return contenu != ROCHER and contenu != VIDE and contenu != TRONC
-
-
+# Retourne le contenu de la case
 def getContenu(case):
-    """
-    Donne le contenu de la case
-    :param case: tuple. Retour de la fonction Case(contenu,courant)
-    :return: string ou retour de la fonction Joueur()
-    """
-    contenu = None
-    if case is not None:
-        contenu, _ = case
-    return contenu
+    return case["contenu"]
 
-
+# Retourne la direction du courant de la case,
+# c'est-à-dire une des valeurs "X", "N", "S", "NO" etc. 
 def getCourant(case):
-    """
-    Donne la direction du courant de la case.
-    :param case: tuple. Retour de la fonction Case(contenu,courant)
-    :return: string. Une des clés du dictionnaire directions
-    """
-    courant = None
-    if case is not None:
-        _, courant = case
-    return courant
+    return case["courant"]
 
-
-
+# Retourne la direction du courant de la case sous la forme
+# d'une des flèches
 def getCourantChar(case):
-    """
-    Retourne la direction du courant de la case sous la forme
-    d'une des flèches
-    :param case: tuple. Retour de la fonction Case(contenu,courant)
-    :return: string. Valeur de directions[courant]
-    """
-    _, courant = case
-    return directions[courant]
+    return directions[case["courant"]]
 
+# Place un courant sur la case le courant est une des valeurs
+# "X", "N", "S", "NO" etc. 
 def setCourant(case,courant):
-    """
-    Affecte un courant à une Case
-    :param case: tuple. Retour de la fonction Case(contenu,courant)
-    :param courant: string. Une des clés de directions
-    :return: tuple. case
-    """
-    contenu, ancien_courant = case
-    if courant in directions:
-        case = (contenu, courant)
-    return case
+    case["courant"]=courant
 
+# Place un objet sur une case, contenu est un caractère
+# parmi VIDE, TRONC, ROCHER ou le caractère représentant un joueur
 def setContenu(case,contenu):
-    """
-    Place un objet sur une case
-    :param case: tuple. Retour de la fonction Case(contenu,courant)
-    :param contenu: string. Caractère parmi VIDE, TRONC, ROCHER ou le caractère représentant un joueur
-    :return: tuple. case
-    """
-    ancien_contenu, courant = case
-    if type(contenu) is str:
-        case = (contenu, courant)
-    return case
+    case["contenu"]=contenu
 
-
+# Permet simplement de récupérer la liste des directions possibles
+# Il faut que votre fonction se réfère au dictionnaire directions
 def getDirections():
-    """
-    permet simplement de récupérer la liste des directions possibles
-    il faut que votre fonction se réfère au dictionnaire directions
-    :return: liste. clés du dictionnaire directions
-    """
-    return list(directions.keys())
+    res=[]
+    for elem in directions.keys() :
+        res.append(elem)
+    return res
 
-
-########################################################################################################################
-# TESTS
-########################################################################################################################
-
-if __name__ == '__main__':  # Si le module est éxécuté tout seul, c'est a dire s'il n'est pas importé
-    l_contenu = [ROCHER, VIDE, TRONC, 'A', 'B', 'C']
-    l_case = []
-
-    # Directions possibles du courant
-    print('DIRECTIONS POSSIBLES', getDirections())
-
-    # Création de cases
-    for contenu in l_contenu:
-        for courant in directions.keys():
-            l_case.append(Case(contenu, courant))
 
     # Obtention des informations de cases
     for case in l_case:
