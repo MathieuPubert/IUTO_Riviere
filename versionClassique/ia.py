@@ -16,15 +16,36 @@ def marquage(riviere,lig,col):
             ligCpt+=1
         else:
             colCpt+=2
+    return marque
 
 # fonction qui choisit automatiquement une direction (qui doit être une 
 # direction valide) pour le joueur courant. L'implémentation choisi aléatoirement
 # une direction mais vous pouvez l'améliorer notamment avec la fonction précédente
 def choixDirection2(jeu):
-    (lig,col)=getPosJoueurCourant(jeu)
     r=getRiviere(jeu)
-    aux=[]
-    for direction in getDirections():
-        if verifDirection(jeu,direction)==DIRECTION_OK:
-            aux.append(direction)
-    return random.choice(aux)
+    marque=marquage(r,getNbLigR(r),getColArrivee(r))
+    (lig,col)=getPosJoueurCourant(jeu)
+    S=marque["valeurs"][lig+2][col]
+    SO=marque["valeurs"][lig+1][col-1]
+    SE=marque["valeurs"][lig+1][col+1]
+    tmp=[]
+    if verifDirection(jeu,"S")==DIRECTION_OK:
+        tmp.append(S)
+    if verifDirection(jeu,"SO")==DIRECTION_OK:
+        tmp.append(SO)
+    if verifDirection(jeu,"SE")==DIRECTION_OK:
+        tmp.append(SE)
+    if min(tmp)==S:
+        return "S"
+    if min(tmp)==SO:
+        return "SO"
+    if min(tmp)==SE:
+        return "SE"
+
+#    (lig,col)=getPosJoueurCourant(jeu)
+#    r=getRiviere(jeu)
+#    aux=[]
+#    for direction in getDirections():
+#        if verifDirection(jeu,direction)==DIRECTION_OK:
+#            aux.append(direction)
+#    return random.choice(aux)
