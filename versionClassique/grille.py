@@ -1,3 +1,4 @@
+
 # coding=utf-8
 # construit une nouvelle grille hexagonale.
 # Cette grille contiendra nbLig lignes, nbCol colonnes.
@@ -36,16 +37,18 @@ def GrilleHexa(nbLig,nbCol,paire=True,valeur=None):
                         grille["valeurs"].append(noneValeur)
     return grille
 
-# retourne le nombre de lignes de la grille
+
 def getNbLigGH(grille):
+
     return grille["nombre de lignes"]
 
-# retourne le nombre de colonnes de la grille
+
 def getNbColGH(grille):
+
     return grille["nombre de colonnes"]
 
-# indique si la grille est paire ou impaire
 def estPaireGH(grille):
+
     return grille["paire"]
 
 # vérifie si une position est bien une position de la grille
@@ -62,8 +65,9 @@ def getValGH(grille,lig,col):
     if estPosGH(grille,lig,col):
         return grille["valeurs"][lig][col]
 
-# met la valeur val dans la grille à la la ligne lig, colonne col
+
 def setValGH(grille,lig,col,val):
+
     if estPosGH(grille,lig,col):
         grille["valeurs"][lig][col]=val
 
@@ -108,6 +112,7 @@ def getNProchainsGH(grille,lig,col,direction,n=3):
 
 
 
+
 # fonction d'initiation d'une grille avec des caractères pour faire des tests
 # la grille doit être créée
 def initAlphaGH(grille):
@@ -121,16 +126,18 @@ def initAlphaGH(grille):
     k=0
     for i in range(nbLig):
         for j in range(dec,nbCol,2):
+
             setValGH(grille,i,j,possibles[k])
             k=(k+1)%len(possibles)
         dec=(dec+1)%2
 
 # affichage en mode texte d'une grille hexagonale
+
 def afficheGH(grille):
     nbLig=getNbLigGH(grille)
     nbCol=getNbColGH(grille)
     if estPaireGH(grille):
-        print(" ",end='')
+        print(" ", end='')
         debut=0
     else:
         debut=1
@@ -163,6 +170,7 @@ def afficheGH(grille):
     for j in range(debut,getNbColGH(grille)-2,2):
         print('_/ \\',end='')
     print('_/')
+
 
 
 #tests-------------------------------------------------
