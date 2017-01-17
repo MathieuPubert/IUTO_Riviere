@@ -15,18 +15,17 @@ def JoueursPossibles():
     return {}
 
 
-def lireJoueursPossibles(nomFic):
+def lireJoueursPossibles(nomFic, joueursPossibles):
     """
-    retourne une liste des joueurs possibles
+    modifie une structure joueursPossibles
     :param nomFic: string. Chemin vers le fichier contenant les joueurs
-    :return: liste de tuples (nom, representation)
+    :return: None. Modifie la structure
     """
-    l_joueurs = []
     with open(nomFic, 'r') as fichier:
         for ligne in fichier:
             nom, representation = ligne.split(',')
-            l_joueurs.append((nom, representation.strip('\n')))
-    return l_joueurs
+            ajouterNom(joueursPossibles, nom, representation.strip('\n'))
+
 
 
 def ajouterNom(joueursPossibles,nom,representation):
@@ -82,16 +81,10 @@ def getRepresentationJoueur(joueursPossibles,nom):
 ########################################################################################################################
 
 if __name__ == '__main__':
-    joueursfichier = lireJoueursPossibles('data/joueurs.txt')
-    joueursfichier.append(('ErreurRepresentation', 'A'))
-    joueursfichier.append(('GEA', 'ErreurNom'))
     possibles = JoueursPossibles()
-
-    # Ajout des joueurs
-    print('\n', 'AJOUT DES JOUEURS')
-    for (nom, representation) in joueursfichier:
-        ajouterNom(possibles, nom, representation)
-        print("Ajout de '{0}' représenté par un symbole '{1}'".format(nom, representation))
+    lireJoueursPossibles('data/joueurs.txt', possibles)
+    ajouterNom(possibles, 'ErreurRepresentation', 'C')
+    ajouterNom(possibles, 'GEA', 'ErreurNom')
 
     # Parcours de la structure
     print('\n', 'PRESENTATION DES JOUEURS')

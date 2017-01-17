@@ -172,26 +172,26 @@ def afficheGH(grille):
     print('_/')
 
 
+if __name__ == '__main__':
+    # tests-------------------------------------------------
+    # print(GrilleHexa(4,5,paire=False,valeur=2))
+    # print('GrilleHexa(4,5,paire=True,valeur=2)',GrilleHexa(4,5,paire=True,valeur=2))
+    # print(GrilleHexa(6,10,paire=False,valeur=2))
+    grilleHexa = (GrilleHexa(4, 5, paire=True, valeur=2))
 
-#tests-------------------------------------------------
-# print(GrilleHexa(4,5,paire=False,valeur=2))
-# print('GrilleHexa(4,5,paire=True,valeur=2)',GrilleHexa(4,5,paire=True,valeur=2))
-# print(GrilleHexa(6,10,paire=False,valeur=2))
-grilleHexa=(GrilleHexa(4,5,paire=True,valeur=2))
+    initAlphaGH(grilleHexa)
 
-initAlphaGH(grilleHexa)
+    setValGH(grilleHexa, 0, 1, 'D')
+    setValGH(grilleHexa, 1, 0, 'B')
+    print(grilleHexa)
+    afficheGH(grilleHexa)
 
-setValGH(grilleHexa,0,1,'D')
-setValGH(grilleHexa,1,0,'B')
-print(grilleHexa)
-afficheGH(grilleHexa)
-
-# print('estPosGH(grilleHexa,3,3)--True :', estPosGH(grilleHexa,3,3))
-# print('estPosGH(grilleHexa,3,2)--False :', estPosGH(grilleHexa,3,2))
-# print('le nb de lignes est :', getNbLigGH(grilleHexa))
-# print('le nb de colonnes est :', getNbColGH(grilleHexa))
-# setValGH(grilleHexa,3,3,7)
-# print(grilleHexa)
-# print('getValGH(grilleHexa,3,3) :', getValGH(grilleHexa,3,3))
-# print('direction : ', incDirectionGH('SE'))
-print(getNProchainsGH(grilleHexa,0,0,'SE',n=3))
+    # print('estPosGH(grilleHexa,3,3)--True :', estPosGH(grilleHexa,3,3))
+    # print('estPosGH(grilleHexa,3,2)--False :', estPosGH(grilleHexa,3,2))
+    # print('le nb de lignes est :', getNbLigGH(grilleHexa))
+    # print('le nb de colonnes est :', getNbColGH(grilleHexa))
+    # setValGH(grilleHexa,3,3,7)
+    # print(grilleHexa)
+    # print('getValGH(grilleHexa,3,3) :', getValGH(grilleHexa,3,3))
+    # print('direction : ', incDirectionGH('SE'))
+    print(getNProchainsGH(grilleHexa, 0, 0, 'SE', n=3))
