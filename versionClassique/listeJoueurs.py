@@ -1,5 +1,6 @@
 from joueur import *
 from joueursPossibles import *
+
 # Cette structure de données gère une liste de joueurs, une liste de joueursPossibles
 # et un joueur courant. La liste des joueurs possibles permet de connaitre les noms
 # des joueurs qui peuvent participer à la descente de la rivière ainsi que leur représentation
@@ -8,51 +9,191 @@ from joueursPossibles import *
 
 # Cette fonction retourne une nouvelle liste de joueurs vide dont les joueurs possibles
 # sont passés en paramètre. Il n'y a pas de joueur courant lorsque la liste est vide
+
 def ListeJoueurs(joueursPossibles={}):
-    pass
+    """
+    Structure présentant une liste de joueurs.
+    :param joueursPossibles: dictionnaire. retour de la fonction JoueursPossibles()
+    :return: dictionnaire :
+    {
+    'Possibles':joueursPossibles, => Structure JoueursPossibles()
+    'Actifs':[], => Liste
+    'Courant':None => None s'il n'y a aucun joueur courant. Structure Joueur() sinon.
+    }
+    """
 
-# retourne l'indice dans la liste du joueur qui porte ce nom
-# -1 si le nom n'est pas dans la liste
+    return {'Possibles': joueursPossibles, 'Actifs': [], 'Courant': None}
+
+
+
+
 def indiceJoueur(joueurs,nom):
-    pass
+    """
+    Donne l'indice du joueur actif indentifié par nom
+    :param joueurs: dictionnaire. Retour de la fonction ListeJoueurs()
+    :param nom: string. nom du joueur
+    :return: integer. Indice du joueur dans joueurs['Actifs'] ou -1 si joueur non présent.
+    """
+    indice = -1
+    i = 0
+    while i < len(joueurs['Actifs']) and indice == -1:
+        if getNom(joueurs['Actifs'][i]) == nom:
+            indice = i
+        i += 1
+    return indice
 
-# ajoute un nouveau joueur dans la liste à partir du nom et de son type
-# la représentation est déduite de la structure joueursPossibles
+
 def ajouterJoueur(joueurs,nom,humain=True):
-    pass
+    """
+    Ajoute un nouveau Joueur() dans les joueurs actifs s'il fait partie des joueurs possibles
+    et le place en joueur courant si c'est le  premier joueur actif
+    :param joueurs: dictionnaire. Retour de la fonction ListeJoueurs()
+    :param nom: string. nom du joueur
+    :param humain: bool. True si le joueur est manipulé par un utilisateur
+    :return: None. Modifie joueurs
+    """
+    if nom in joueurs['Possibles']:
+        joueurs['Actifs'].append(Joueur(nom, joueurs['Possibles'][nom], humain))
+        if len(joueurs['Actifs']) == 1:
+            joueurs['Courant'] = joueurs['Actifs'][0]
         
-# Cette fonction retire un joueur de la liste
-# si le joueur n'y était pas elle ne fait rien
-# Attention si la liste devient vide il n'y a plus de joueur courant
+
 def retirerJoueur(joueurs,nom):
-    pass
+    """
+    Cette fonction retire un joueur de la liste
+    Si le joueur n'y était pas elle ne fait rien
+    Si je joueur etait lejoueur courant, passe son tour au suivant.
+    Attention si la liste devient vide il n'y a plus de joueur courant
+    :param joueurs: dictionnaire. Retour de la fonction ListeJoueurs()
+    :param nom:  string. nom du joueur
+    :return: None. Modifie joueurs
+    """
+    i = 0
+    while i < len(joueurs['Actifs']):
+        if getNom(getJoueurCourant(joueurs)) == nom:
+            joueurSuivant(joueurs)
+        if getNom(joueurs['Actifs'][i]) == nom:
+            joueurs['Actifs'].pop(i)
+        i += 1
+    if joueurs['Actifs'] == []:
+        joueurs['Courant'] = None
 
-# Cette fonction retourne le nombre de joueurs dans la liste
+
 def getNbJoueurs(joueurs):
-    pass
+    """
+    Cette fonction retourne le nombre de joueurs dans la liste
+    :param joueurs: retour de la fonction ListeJoueurs()
+    :return: integer. nombre de joueurs actifs
+    """
+    return len(joueurs['Actifs'])
 
-# retourne la structure joueursPossibles associée à la liste de joueurs
+
 def getJoueursPossibles(joueurs):
-    pass
+    """
+    Retourne la structure joueursPossibles associée à la liste de joueurs
+    :param joueurs: retour de la fonction ListeJoueurs()
+    :return: structure JoueursPossibles()
+    """
+    return joueurs['Possibles']
 
-# Cette fonction retourne le joueur courant
+
 def getJoueurCourant(joueurs):
-    pass
+    """
+    Cette fonction retourne le joueur courant
+    :param joueurs: retour de la fonction ListeJoueurs()
+    :return: structure Joueur() ou None si aucun joueur courant
+    """
+    return joueurs['Courant']
 
-# Cette fonction retourne le nom du joueur numéro i (dans l'ordre où ils ont été ajoutés)
-# i est un entier entre 0 et le nombre de joueurs de la liste -1
+
 def getJoueurI(joueurs,i):
-    pass
+    """
+    Cette fonction retourne le nom du joueur numéro i (dans l'ordre où ils ont été ajoutés)
+    i est un entier entre 0 et le nombre de joueurs de la liste -1
+    :param joueurs: retour de la fonction ListeJoueurs()
+    :param i: integer. Indice du joueur dans joueurs['Actifs']
+    :return: structure Joueur()
+    """
+    return joueurs['Actifs'][i]
 
-# retourne le joueurs de la liste qui correspond à la représentation
+
 def getJoueurRep(joueurs,representation):
-    pass
+    """
+    Recherche d'un joueur en fonction de sa representation
+    :param joueurs: retour de la fonction ListeJoueurs()
+    :param representation: string. Caratère représentant le joueur ou chemin vers fichier image
+    :return: tuple de même structure que le retour de la fonction Joueur()
+    """
+    player = None
+    for joueur in joueurs['Actifs']:
+        if getRepresentation(joueur) == representation:
+            player = joueur
+    return player
 
-# vide la liste de joueurs
+
 def viderJoueurs(joueurs):
-    pass
+    """
+    Vide la liste de joueurs
+    :param joueurs: retour de la fonction ListeJoueurs()
+    :return: None. Modifie joueurs
+    """
+    joueurs['Actifs'] = []
+    joueurs['Courant'] = None
 
-# passe au joueur suivant
+
 def joueurSuivant(joueurs):
-    pass
+    """
+    Passe au joueur suivant. Si fin de la liste des joueurs actifs, retourne à l'indice 0
+    :param joueurs: retour de la fonction ListeJoueurs()
+    :return: None. Modifie joueurs
+    """
+    indice_courant = indiceJoueur(joueurs, getNom(joueurs['Courant']))
+    joueurs['Courant'] = joueurs['Actifs'][(indice_courant + 1) % getNbJoueurs(joueurs)]
 
+
+########################################################################################################################
+# TESTS
+########################################################################################################################
+
+if __name__ == '__main__':
+    possibles = JoueursPossibles()
+    l_joueursfichier = lireJoueursPossibles('data/joueurs.txt')
+    d_joueurs = ListeJoueurs(possibles)
+
+    # Remplissage de la structure avec les joueurs du fichier 'joueurs.txt'
+    for nom, representation in l_joueursfichier:
+        d_joueurs['Possibles'][nom] = representation
+        print("Import des données du joueur '{0}' représenté par '{1}' ".format(nom, representation))
+
+    # Affichage du résultat de l'import
+    print("Resultat de l'import:", getJoueursPossibles(d_joueurs))
+
+    # Ajout de l'ensemble des joueurs possibles dans les joueurs actifs
+    for (nom, representation) in d_joueurs['Possibles'].items():
+        ajouterJoueur(d_joueurs, nom)
+        print("Ajout du joueur actif '{0}'".format(nom, representation))
+
+    # Affichage de diverses infos
+
+    print('Nombre de joueurs actifs : ', getNbJoueurs(d_joueurs))
+    for (nom, representation) in l_joueursfichier:
+        # chaque nom correspond a sa representation ?
+        assert (Joueur(nom, representation, True) == getJoueurRep(d_joueurs, representation))
+        # chaque joueur à l'indice a t-il le bon nom ?
+        print("joueur à l'indice : ", indiceJoueur(d_joueurs, nom), getJoueurI(d_joueurs, indiceJoueur(d_joueurs, nom)))
+
+    for i in range(getNbJoueurs(d_joueurs)):
+        courant = getJoueurCourant(d_joueurs)
+        # Le joueur courant est-il l'actif à l'indice correspondant?
+        assert (getJoueurI(d_joueurs, i) == courant)
+        # Puis on les fait cycler
+        joueurSuivant(d_joueurs)
+        print(i, getJoueurI(d_joueurs, i), getJoueurCourant(d_joueurs))
+
+    retirerJoueur(d_joueurs, 'INFORMATIQUE')
+
+    print(d_joueurs)
+
+    viderJoueurs(d_joueurs)
+
+    print(d_joueurs)

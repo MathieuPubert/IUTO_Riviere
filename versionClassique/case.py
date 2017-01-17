@@ -6,6 +6,7 @@ ROCHER="#"
 TRONC="T"
 VIDE=" "
 
+
 # Création d'un case
 def Case(contenu,courant):
     return {"contenu":contenu,"courant":courant}
@@ -68,3 +69,18 @@ def getDirections():
         res.append(elem)
     return res
 
+
+    # Obtention des informations de cases
+    for case in l_case:
+        print('--------------------------------------------------------------------------------')
+        print('CONTENU : ', getContenu(case))
+        print('VERIFICATION CONTENU :', 'Joueur' * estJoueur(case), 'Tronc' * estTronc(case),
+              'Rocher' * estRocher(case), 'Vide' * estVide(case))
+        print('COURANT : ', getCourant(case), getCourantChar(case))
+        case = setContenu(case, VIDE)
+        case = setCourant(case, 'N')
+        print('CONTENU CHANGE POUR VIDE: ', getContenu(case))
+        print('VERIFICATION CONTENU :', 'Joueur' * estJoueur(case), 'Tronc' * estTronc(case),
+              'Rocher' * estRocher(case),
+              'Vide' * estVide(case))
+        print('COURANT CHANGE POUR NORD: ', getCourant(case), getCourantChar(case))

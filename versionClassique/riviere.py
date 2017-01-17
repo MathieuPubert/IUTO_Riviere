@@ -6,34 +6,65 @@ from case import *
 # le fichier case.py. En plus elle contient une colonne de départ sur la 1ere ligne
 # et une colonne d'arrivée sur le dernière ligne
 
-# cette fonction créer une rivière dont toutes les cases contiennent VIDE
-# et n'ont pas de courant
-def Riviere(nbLig,nbCol,paire=True, colDepart=0,colArrivee=0):
-    pass
 
-# Cette fonction initialise une rivière avec des cases vides et sans courant
+def Riviere(nbLig,nbCol,paire=True, colDepart=0,colArrivee=0):
+    """
+    Représentation de la rivière sur laquelle les joueurs évolueront
+    :param nbLig: integer. Nombre de lignes
+    :param nbCol: integer. Nombre de colonnes
+    :param paire: bool. True si les colonnes paires contiennent les lignes paires
+    :param colDepart: integer. Indice de la colonne de départ
+    :param colArrivee: integer. Indice de la colonne d'arrivée
+    :return: Dictionnaire.
+    """
+    d_riviere = {'Lignes': nbLig,
+                 'Colonnes': nbCol,
+                 'Paire': paire,
+                 'Depart': colDepart,
+                 'Arrivée': colArrivee}
+
+    # Dans la foulée je vais rajouter une premiere initialisation aux valeurs paramètrées
+    initRiviere(d_riviere, d_riviere['Lignes'], d_riviere['Colonnes'], d_riviere['Paire'])
+
+    return d_riviere
+
+
+
 def initRiviere(r,nbLig,nbCol,paire):
-    pass
+    """
+    Initialise une rivière. Ecrase nbLig,nbCol, paire de Riviere()
+    :param r: retour de la fonction Riviere()
+    :param nbLig: integer. Nombre de lignes de la riviere
+    :param nbCol: integer. nombre de colonnes de la riviere
+    :param paire: bool. True si les lignes paires contiennent les colonnes paires (cf API grille)
+    :return: None. Modifie r
+    """
+    r['Lignes'] = nbLig
+    r['Colonnes'] = nbCol
+    r['Paire'] = paire
+    r['Grille'] = GrilleHexa(nbLig, nbCol, paire, Case(VIDE, 'X'))
+
+
 
 # retourne la colonne de départ de la rivière
 def getColDepart(r):
-    pass
+    return r['Depart']
 
 # retourne la colonne d'arrivée de la rivière
 def getColArrivee(r):
-    pass
+    return r['Arrivée']
 
 # retourne le nombre de lignes de la rivière
 def getNbLigR(r):
-    pass
+    return r['Lignes']
 
 # retourne le nombre de colonnes de la rivière
 def getNbColR(r):
-    pass
+    return r['Colonnes']
 
 # indique si la rivière est paire ou non
 def estPaireR(r):
-    pass
+    return r['Paire']
 
 # retourne la case qui se trouve à la ligne l colonne c
 def getCase(r,l,c):
