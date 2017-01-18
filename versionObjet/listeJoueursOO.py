@@ -2,6 +2,7 @@ from joueurOO import *
 from joueursPossiblesOO import *
 
 
+# noinspection PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences
 class ListeJoueurs(object):
     """
     # Cette structure de données gère une liste de joueurs, une liste de joueursPossibles
@@ -30,7 +31,6 @@ class ListeJoueurs(object):
         """
         Ajoute un nouveau Joueur() dans les joueurs actifs s'il fait partie des joueurs possibles
         et le place en joueur courant si c'est le  premier joueur actif
-        :param joueurs: dictionnaire. Retour de la fonction ListeJoueurs()
         :param nom: string. nom du joueur
         :param humain: bool. True si le joueur est manipulé par un utilisateur
         :return: None. Modifie joueurs
@@ -46,7 +46,6 @@ class ListeJoueurs(object):
         Si le joueur n'y était pas elle ne fait rien
         Si je joueur etait lejoueur courant, passe son tour au suivant.
         Attention si la liste devient vide il n'y a plus de joueur courant
-        :param joueurs: dictionnaire. Retour de la fonction ListeJoueurs()
         :param nom:  string. nom du joueur
         :return: None. Modifie joueurs
         """
@@ -63,7 +62,6 @@ class ListeJoueurs(object):
     def get_nbjoueurs(self):
         """
         Cette fonction retourne le nombre de joueurs dans la liste
-        :param joueurs: retour de la fonction ListeJoueurs()
         :return: integer. nombre de joueurs actifs
         """
         return len(self.actifs)
@@ -71,7 +69,6 @@ class ListeJoueurs(object):
     def get_joueurspossibles(self):
         """
         Retourne la structure joueursPossibles associée à la liste de joueurs
-        :param joueurs: retour de la fonction ListeJoueurs()
         :return: structure JoueursPossibles()
         """
         return self.possibles
@@ -79,7 +76,6 @@ class ListeJoueurs(object):
     def get_joueurcourant(self):
         """
         Cette fonction retourne le joueur courant
-        :param joueurs: retour de la fonction ListeJoueurs()
         :return: structure Joueur() ou None si aucun joueur courant
         """
         return self.courant
@@ -88,7 +84,6 @@ class ListeJoueurs(object):
         """
         Cette fonction retourne le nom du joueur numéro i (dans l'ordre où ils ont été ajoutés)
         i est un entier entre 0 et le nombre de joueurs de la liste -1
-        :param joueurs: retour de la fonction ListeJoueurs()
         :param i: integer. Indice du joueur dans self.actifs
         :return: string. nom du joueur
         """
@@ -97,7 +92,6 @@ class ListeJoueurs(object):
     def get_joueurrep(self, representation):
         """
         Recherche d'un joueur en fonction de sa representation
-        :param joueurs: retour de la fonction ListeJoueurs()
         :param representation: string. Caratère représentant le joueur ou chemin vers fichier image
         :return: tuple de même structure que le retour de la fonction Joueur()
         """
@@ -110,7 +104,6 @@ class ListeJoueurs(object):
     def vider_joueurs(self):
         """
         Vide la liste de joueurs
-        :param joueurs: retour de la fonction ListeJoueurs()
         :return: None. Modifie joueurs
         """
         self.actifs = []
@@ -119,11 +112,10 @@ class ListeJoueurs(object):
     def joueur_suivant(self):
         """
         Passe au joueur suivant. Si fin de la liste des joueurs actifs, retourne à l'indice 0
-        :param joueurs: retour de la fonction ListeJoueurs()
         :return: None. Modifie joueurs
         """
         indice_courant = self.indice_joueur(self.courant.get_nom())
-        self.courant = self.actifs[(indice_courant + 1) % self.get_nbjoueurs(self)]
+        self.courant = self.actifs[(indice_courant + 1) % self.get_nbjoueurs()]
 
 
 ########################################################################################################################

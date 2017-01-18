@@ -1,5 +1,4 @@
-
-def Joueur(nom,representation,humain=True):
+def Joueur(nom, representation, humain=True):
     """
     Représentation d'un joueur.
     Choix du dictionnaire

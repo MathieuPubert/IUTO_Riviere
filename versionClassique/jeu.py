@@ -3,12 +3,12 @@ from listeJoueurs import *
 import random
 
 # ces constantes servent à gérer le code retour de la fonction verifDirection
-DIRECTION_OK=0
-PAS_UNE_DIRECTION=1
-DIRECTION_NON_AUTORISEE=2
+DIRECTION_OK = 0
+PAS_UNE_DIRECTION = 1
+DIRECTION_NON_AUTORISEE = 2
 
 
-def Jeu(prefixe,ficJoueurs,ficRiviere):
+def Jeu(prefixe, ficJoueurs, ficRiviere):
     """
     Cette fonction abominable:
     - créée un nouveau jeu
@@ -53,7 +53,6 @@ def initJeu(jeu):
     jeu["Deplacements"] = jeu["RNG"](1, 5)
 
 
-
 def getRiviere(jeu):
     """
     Permet d'obtenir la rivière du jeu
@@ -72,7 +71,7 @@ def getClassement(jeu):
     return jeu["Classement"]
 
 
-def ajouterJoueurJ(jeu,joueur):
+def ajouterJoueurJ(jeu, joueur):
     """
     Permet d'ajouter un nouveau joueur participant à la course
     :param jeu: retour de la fonction Jeu()
@@ -109,7 +108,7 @@ def getJoueurCourantJ(jeu):
     return getNom(getJoueurCourant(getJoueursJ(jeu)))
 
 
-def getPosJoueur(jeu,joueur):
+def getPosJoueur(jeu, joueur):
     """
     Permet de retrouver la position d'un joueur sur le plateau en fonction de son nom
     :param jeu: retour de la fonction Jeu()
@@ -155,7 +154,7 @@ def enleverTousCoupsRestants(jeu):
     jeu["Deplacements"] = 0
 
 
-def ajouterClassement(jeu,nomJoueur):
+def ajouterClassement(jeu, nomJoueur):
     """
     Permet d'ajouter un joueur au classement et de l'enlever à la liste des
     joueurs participants à la course
@@ -177,7 +176,7 @@ def joueurSuivantJ(jeu):
     joueurSuivant(getJoueursJ(jeu))
 
 
-def verifDirection(jeu,direction):
+def verifDirection(jeu, direction):
     """
     Permet de verifier si la direction passée en paramètre est bien une position
     et si c'est le cas, que le joueur courant a le droit de se déplacer dans cette
@@ -204,7 +203,7 @@ def verifDirection(jeu,direction):
     return res
 
 
-def calculerDirection(jeu,pos):
+def calculerDirection(jeu, pos):
     """
     Calcule la direction entre la position du joueur courant et la position pos
     :param jeu: retour de la fonction Jeu()
@@ -263,7 +262,6 @@ def finirDeplacement(jeu):
     :return: None. modifie jeu
     """
 
-
     # pour chaque (x,y)
     for x in range(getNbLigR(getRiviere(jeu))):
         for y in range(getNbColR(getRiviere(jeu))):
@@ -274,12 +272,12 @@ def finirDeplacement(jeu):
                 # et que la case contient un element mobile
                 if not estRocher(getContenuR(getRiviere(jeu), x, y)):
                     # alors on le bouge
-                    deplacer(getRiviere(jeu), x, y, getCourantR(getRiviere(jeu, x, y)))
+                    deplacer(getRiviere(jeu), x, y, getCourantR(getRiviere(jeu), x, y))
                     # setContenuR(getRiviere(jeu),nouvx,nouvy, getContenuR(getRiviere(jeu, x, y)))
                     # setContenuR(getRiviere(jeu), x, y, "VIDE")
 
 
-def jouerDirection(jeu,direction):
+def jouerDirection(jeu, direction):
     """
     Cette fonction va essayer de déplacer le joueur courant dans la direction
     indiquée en paramètre. Le fonction verifDirection sera utilisée.

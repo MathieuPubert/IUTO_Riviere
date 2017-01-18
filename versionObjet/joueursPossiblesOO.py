@@ -34,7 +34,7 @@ class JoueursPossibles(object):
     def get_representationjoueur(self, nom):
         """
         Recherche la représentation en fonction de son nom
-        :param joueursPossibles: dictionnaire. retour de JoueursPossibles()
+        :param nom: nom du joueur
         :return: string. Représentation du joueur. Chaine vide si inexistant
         """
         return self.pions.get(nom, '')
