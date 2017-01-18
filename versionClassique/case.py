@@ -69,18 +69,18 @@ def getDirections():
         res.append(elem)
     return res
 
-
+# TESTS
+if __name__ == '__main__':
+    print('DIRECTIONS POSSIBLES :', getDirections())
     # Obtention des informations de cases
+    l_case = [Case("#","X"),Case("T","N"),Case(" ","NO"),Case("J1","S"),Case("J2","X")]
     for case in l_case:
         print('--------------------------------------------------------------------------------')
+        print('CASE :', case)
+        print('VERIFICATION CONTENU :', 'Joueur' * estJoueur(case), 'Rocher' * estRocher(case), 'Vide' * estVide(case))
         print('CONTENU : ', getContenu(case))
-        print('VERIFICATION CONTENU :', 'Joueur' * estJoueur(case), 'Tronc' * estTronc(case),
-              'Rocher' * estRocher(case), 'Vide' * estVide(case))
         print('COURANT : ', getCourant(case), getCourantChar(case))
-        case = setContenu(case, VIDE)
-        case = setCourant(case, 'N')
-        print('CONTENU CHANGE POUR VIDE: ', getContenu(case))
-        print('VERIFICATION CONTENU :', 'Joueur' * estJoueur(case), 'Tronc' * estTronc(case),
-              'Rocher' * estRocher(case),
-              'Vide' * estVide(case))
+        setCourant(case, 'N')
         print('COURANT CHANGE POUR NORD: ', getCourant(case), getCourantChar(case))
+        setContenu(case, VIDE)
+        print('CONTENU CHANGE POUR VIDE: ', getContenu(case))
