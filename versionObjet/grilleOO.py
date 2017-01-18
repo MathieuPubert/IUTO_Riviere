@@ -5,11 +5,10 @@
 # valeur sera la valeur par défaut stockée dans chaque case de la grille
 class GrilleHexa(object):
     def __init__(self,nbLig,nbCol,paire=True,valeur=''):
-        self.grille={}
-        self.grille["nombre de lignes"]=nbLig
-        self.grille["nombre de colonnes"]=nbCol
-        self.grille["paire"]=paire
-        self.grille["valeurs"]=[]
+        self.nbLig = nbLig
+        self.nbCol = nbCol
+        self.paire = paire
+        self.grille=[]
 
         i=0
         for i in range(nbLig):
@@ -17,36 +16,36 @@ class GrilleHexa(object):
             noneValeur=[None,valeur]*(nbCol//2)
             if nbCol%2 == 0 :                                         # si le nb de colonnes est paire
                 if i%2 == 0  :                                              #si l'indice de la ligne est paire
-                    self.grille["valeurs"].append(valeurNone)
+                    self.grille.append(valeurNone)
                 else:                                                       #si l'indice de la ligne est impair
-                    self.grille["valeurs"].append(noneValeur)
+                    self.grille.append(noneValeur)
 
             elif nbCol%2!=0:
                 noneValeur.append(None)
                 valeurNone.append(valeur)                                        #si le nb de colonnes est impaire
                 if not paire:                                           #si la grille est impaire
                     if i%2 == 0:
-                        self.grille["valeurs"].append(noneValeur)
+                        self.grille.append(noneValeur)
                     else:
-                        self.grille["valeurs"].append(valeurNone)
+                        self.grille.append(valeurNone)
                 else:
                     if paire:
                         if i%2 == 0:  #si la ligne est paire
-                            self.grille["valeurs"].append(valeurNone)
+                            self.grille.append(valeurNone)
                         else:
-                            self.grille["valeurs"].append(noneValeur)
+                            self.grille.append(noneValeur)
 
     # retourne le nombre de lignes de la grille
     def getNbLigGH(self):
-        return self.grille["nombre de lignes"]
+        return self.nbLig
 
     # retourne le nombre de colonnes de la grille
     def getNbColGH(self):
-        return self.grille["nombre de colonnes"]
+        return self.nbCol
 
     # indique si la grille est paire ou impaire
     def estPaireGH(self):
-        return self.grille["paire"]
+        return self.paire
 
     # vérifie si une position est bien une position de la grille
     # par exemple si la grille est paire, lig vaut 2 et col vaut 3
@@ -54,19 +53,19 @@ class GrilleHexa(object):
     # de numéro paire d'une grille paire
     def estPosGH(self,lig,col):
         estPos=False
-        if self.grille["valeurs"][lig][col] != None:
+        if self.grille[lig][col] != None:
             estPos=True
         return estPos
     # retourne la valeur qui se trouve dans la grille à la ligne lig, colonne col
     def getValGH(self,lig,col):
         if self.estPosGH(lig,col):
 
-            return self.grille["valeurs"][lig][col]
+            return self.grille[lig][col]
 
     # met la valeur val dans la grille à la la ligne lig, colonne col
     def setValGH(self,lig,col,val):
         if self.estPosGH(lig,col):
-            self.grille["valeurs"][lig][col]=val
+            self.grille[lig][col]=val
 
     # retourne un couple d'entier qui indique de combien de ligne et de combien
     # de colonnes il faut se déplacer pour aller dans une direction.
@@ -95,7 +94,7 @@ class GrilleHexa(object):
 
         direction=self.incDirectionGH(direction)
         for i in range(n):
-            valeur=self.grille['valeurs'][lig+(direction[0]*i)][col+(direction[1]*i)]
+            valeur=self.grille[lig+(direction[0]*i)][col+(direction[1]*i)]
             liste_NProchains.append(valeur)
         return liste_NProchains
 
