@@ -25,6 +25,7 @@ def getRepresentation(joueur):
     :param joueur: retour de la fonction Joueur()
     :return: string. Représentation du joueur
     """
+    print(joueur)
     return joueur['Representation']
 
 
