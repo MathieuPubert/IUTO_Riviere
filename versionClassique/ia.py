@@ -36,7 +36,9 @@ def choixDirection2(jeu):
     for elem in direction:
         if verifDirection(jeu,elem)==DIRECTION_OK:
             listeDirectionVerif.append(direction[elem])
-    return a for a,b in direction.items() if b==min(listeDirectionVerif)
+    for a,b in direction.items():
+        if b==min(listeDirectionVerif):
+            return a
 
 def choixDirectionAlea(jeu):
     (lig,col)=getPosJoueurCourant(jeu)
