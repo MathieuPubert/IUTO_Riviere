@@ -34,9 +34,11 @@ def choixDirection(jeu):
                  "SE": marque["valeurs"][lig + 1][col + 1], "N": marque["valeurs"][lig - 2][col],
                  "NE": marque["valeurs"][lig - 1][col + 1], "NO": marque["valeurs"][lig - 1][col - 1]}
     for elem in direction:
+        print ("testDebug getPosJoueurCourant :")
+        print (getPosJoueurCourant(game))
         if verifDirection(jeu, elem) == DIRECTION_OK:
             listeDirectionVerif.append(direction[elem])
-    print ("testDebug :")
+    print ("testDebug listeDirectionVerif :")
     print (listeDirectionVerif)
     for a, b in direction.items():
         if b == min(listeDirectionVerif):
