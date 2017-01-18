@@ -1,4 +1,5 @@
 import random
+from math import *
 from jeu import *
 
 
@@ -6,17 +7,18 @@ from jeu import *
 # rivière sa distance jusqu'à la case qui se trouve en lig,col
 def marquage(riviere, lig, col):
     marque = GrilleHexa(getNbLigR(riviere), getNbColR(riviere), estPaireR(riviere), 0)
-    for cpt in range(int(getNbLigR(riviere) * (getNbColR(riviere) / 2))):
-        ligCpt = 1
-        if estPaireR(riviere):
-            colCpt = 1
-        else:
-            ligCpt = 2
-        marque["valeurs"][ligCpt][colCpt] = abs(lig - ligCpt + col - colCpt)
-        if colCpt + 2 > getNbColR(riviere):
-            ligCpt += 1
-        else:
-            colCpt += 2
+    i=0
+    while i < len(marque["valeurs"]):
+        j=0
+        while j < len(marque["valeurs"][i]):
+            if estPosGH(marque, i, j):
+                (a,b)=(i,j)
+                (a,b)=((a+b)/2,(b-a)/2)
+                (c,d)=(lig,col)
+                (c,d)=((c+d)/2,(d-c)/2)
+                marque["valeurs"][i][j] = int((abs(c-a)+abs(d-b)+abs(c-a+d-b))/2)
+            j+=1
+        i+=1
     return marque
 
 
@@ -48,12 +50,15 @@ def choixDirectionAlea(jeu):
             aux.append(direction)
     return random.choice(aux)
 
+
 # TESTS
 if __name__ == '__main__':
-    print ("Test marquage(Riviere(20, 5, True, 0, 0),7,3) :")
-    afficheGH(marquage(Riviere(20, 5, True, 0, 0),7,3)
-    print("test")
-    print ("Test choixDirection((./data, joueurs.txt, riviere1.txt)) :")
-    choixDirection(('./data', 'joueurs.txt', 'riviere1.txt'))
-    print ("Test choixDirectionAlea((./data, joueurs.txt, riviere1.txt)) :")
-    choixDirectionAlea(('./data', 'joueurs.txt', 'riviere1.txt'))
+    print ("Test marquage(Riviere(12, 9, True, 0, 0),6,4) :")
+    afficheGH(marquage(Riviere(12, 9, True, 0, 0),6,4))
+
+    #game=Jeu('./data/', 'joueurs.txt', 'riviere1.txt')
+    #initJeu(game)
+    #print ("Test choixDirection(game) :")
+    #choixDirection(game)
+    #print ("Test choixDirectionAlea(game) :")
+    #choixDirectionAlea(game)
