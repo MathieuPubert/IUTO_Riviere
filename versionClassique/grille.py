@@ -1,10 +1,9 @@
-
 # coding=utf-8
 # construit une nouvelle grille hexagonale.
 # Cette grille contiendra nbLig lignes, nbCol colonnes.
 # si paire est à True la grille sera paire sinon elle sera impaire
 # valeur sera la valeur par défaut stockée dans chaque case de la grille
-def GrilleHexa(nbLig,nbCol,paire=True,valeur=None):
+def GrilleHexa(nbLig,nbCol,paire=True,valeur=''):
     grille={}
     grille["nombre de lignes"]=nbLig
     grille["nombre de colonnes"]=nbCol
@@ -37,18 +36,16 @@ def GrilleHexa(nbLig,nbCol,paire=True,valeur=None):
                         grille["valeurs"].append(noneValeur)
     return grille
 
-
+# retourne le nombre de lignes de la grille
 def getNbLigGH(grille):
-
     return grille["nombre de lignes"]
 
-
+# retourne le nombre de colonnes de la grille
 def getNbColGH(grille):
-
     return grille["nombre de colonnes"]
 
+# indique si la grille est paire ou impaire
 def estPaireGH(grille):
-
     return grille["paire"]
 
 # vérifie si une position est bien une position de la grille
@@ -63,11 +60,11 @@ def estPosGH(grille,lig,col):
 # retourne la valeur qui se trouve dans la grille à la ligne lig, colonne col
 def getValGH(grille,lig,col):
     if estPosGH(grille,lig,col):
+
         return grille["valeurs"][lig][col]
 
-
+# met la valeur val dans la grille à la la ligne lig, colonne col
 def setValGH(grille,lig,col,val):
-
     if estPosGH(grille,lig,col):
         grille["valeurs"][lig][col]=val
 
@@ -79,22 +76,14 @@ def setValGH(grille,lig,col,val):
 # il faut remonter d'une ligne et aller une colonne vers la droite
 # Cette fonction vous sera utile pour la fonction suivante.
 def incDirectionGH(direction):
-    if direction=='N':
-        return (-2,0)
-    elif direction=='S':
-        return (2,0)
-    elif direction=='E':
-        return (0,2)
-    elif direction=='O':
-        return (0,-2)
-    elif direction=='NE':
-        return (-1,1)
-    elif direction=='NO':
-        return (-1,-1)
-    elif direction=='SE':
-        return (1,1)
-    elif direction=='SO':
-        return (1,-1)
+    direction={ 'N': (-2,0),
+                'S': (2,0),
+                'E': (0,2),
+                'O': (0,-2),
+                'NE': (-1,1),
+                'NO': (-1,-1),
+                'SE': (1,1),
+                'SO': (1,-1) }
 
 # permet de retourner la liste des n valeurs qui se trouvent dans la grille
 # dans une direction donnée à partir de la position lig,col
@@ -106,11 +95,8 @@ def getNProchainsGH(grille,lig,col,direction,n=3):
     direction=incDirectionGH(direction)
     for i in range(n):
         valeur=grille['valeurs'][lig+(direction[0]*i)][col+(direction[1]*i)]
-        print(valeur)
         liste_NProchains.append(valeur)
     return liste_NProchains
-
-
 
 
 # fonction d'initiation d'une grille avec des caractères pour faire des tests
@@ -126,18 +112,16 @@ def initAlphaGH(grille):
     k=0
     for i in range(nbLig):
         for j in range(dec,nbCol,2):
-
             setValGH(grille,i,j,possibles[k])
             k=(k+1)%len(possibles)
         dec=(dec+1)%2
 
 # affichage en mode texte d'une grille hexagonale
-
 def afficheGH(grille):
     nbLig=getNbLigGH(grille)
     nbCol=getNbColGH(grille)
     if estPaireGH(grille):
-        print(" ", end='')
+        print(" ",end='')
         debut=0
     else:
         debut=1
@@ -172,26 +156,28 @@ def afficheGH(grille):
     print('_/')
 
 
+
+#tests-------------------------------------------------
 if __name__ == '__main__':
-    # tests-------------------------------------------------
-    # print(GrilleHexa(4,5,paire=False,valeur=2))
-    # print('GrilleHexa(4,5,paire=True,valeur=2)',GrilleHexa(4,5,paire=True,valeur=2))
-    # print(GrilleHexa(6,10,paire=False,valeur=2))
-    grilleHexa = (GrilleHexa(4, 5, paire=True, valeur=2))
+    print(GrilleHexa(4,5,paire=False,valeur=2))
+    print('GrilleHexa(4,5,paire=True,valeur=2)',GrilleHexa(4,5,paire=True,valeur=2))
+    print(GrilleHexa(6,10,paire=False,valeur=2))
+    grilleHexa=(GrilleHexa(4,5,paire=True,valeur=2))
 
     initAlphaGH(grilleHexa)
 
-    setValGH(grilleHexa, 0, 1, 'D')
-    setValGH(grilleHexa, 1, 0, 'B')
+    setValGH(grilleHexa,0,1,'D')
+    setValGH(grilleHexa,1,0,'B')
     print(grilleHexa)
     afficheGH(grilleHexa)
 
-    # print('estPosGH(grilleHexa,3,3)--True :', estPosGH(grilleHexa,3,3))
-    # print('estPosGH(grilleHexa,3,2)--False :', estPosGH(grilleHexa,3,2))
-    # print('le nb de lignes est :', getNbLigGH(grilleHexa))
-    # print('le nb de colonnes est :', getNbColGH(grilleHexa))
-    # setValGH(grilleHexa,3,3,7)
-    # print(grilleHexa)
-    # print('getValGH(grilleHexa,3,3) :', getValGH(grilleHexa,3,3))
-    # print('direction : ', incDirectionGH('SE'))
-    print(getNProchainsGH(grilleHexa, 0, 0, 'SE', n=3))
+    print('estPosGH(grilleHexa,3,3)--True :', estPosGH(grilleHexa,3,3))
+    print('estPosGH(grilleHexa,3,2)--False :', estPosGH(grilleHexa,3,2))
+    print('le nb de lignes est :', getNbLigGH(grilleHexa))
+    print('le nb de colonnes est :', getNbColGH(grilleHexa))
+    setValGH(grilleHexa,3,3,7)
+    print(grilleHexa)
+    print('getValGH(grilleHexa,3,3) :', getValGH(grilleHexa,3,3))
+    print('direction : ', incDirectionGH('SE'))
+    print(getNProchainsGH(grilleHexa,0,0,'SE',n=3))
+
