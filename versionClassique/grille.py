@@ -156,6 +156,7 @@ def afficheGH(grille):
     print('_/')
 
 
+
 #tests-------------------------------------------------
 if __name__ == '__main__':
     print(GrilleHexa(4,5,paire=False,valeur=2))
@@ -179,3 +180,4 @@ if __name__ == '__main__':
     print('getValGH(grilleHexa,3,3) :', getValGH(grilleHexa,3,3))
     print('direction : ', incDirectionGH('SE'))
     print(getNProchainsGH(grilleHexa,0,0,'SE',n=3))
+

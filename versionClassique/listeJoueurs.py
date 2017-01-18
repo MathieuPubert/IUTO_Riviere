@@ -157,13 +157,8 @@ def joueurSuivant(joueurs):
 
 if __name__ == '__main__':
     possibles = JoueursPossibles()
-    l_joueursfichier = lireJoueursPossibles('data/joueurs.txt')
+    lireJoueursPossibles('data/joueurs.txt', possibles)
     d_joueurs = ListeJoueurs(possibles)
-
-    # Remplissage de la structure avec les joueurs du fichier 'joueurs.txt'
-    for nom, representation in l_joueursfichier:
-        d_joueurs['Possibles'][nom] = representation
-        print("Import des données du joueur '{0}' représenté par '{1}' ".format(nom, representation))
 
     # Affichage du résultat de l'import
     print("Resultat de l'import:", getJoueursPossibles(d_joueurs))
@@ -176,7 +171,7 @@ if __name__ == '__main__':
     # Affichage de diverses infos
 
     print('Nombre de joueurs actifs : ', getNbJoueurs(d_joueurs))
-    for (nom, representation) in l_joueursfichier:
+    for (nom, representation) in d_joueurs["Possibles"].items():
         # chaque nom correspond a sa representation ?
         assert (Joueur(nom, representation, True) == getJoueurRep(d_joueurs, representation))
         # chaque joueur à l'indice a t-il le bon nom ?
