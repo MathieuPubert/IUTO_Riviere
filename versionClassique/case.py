@@ -15,18 +15,26 @@ def Case(contenu, courant):
 # Retourne un booléen indiquant si la case contient un rocher ou non
 def estRocher(case):
     res = None
-    if case["contenu"] == "#":
+    if case["contenu"] == ROCHER:
         res = True
     else:
         res = False
     return res
 
 
+def estTronc(case):
+    res = None
+    if case["contenu"] == TRONC:
+        res = True
+    else:
+        res = False
+    return res
+
 # Retourne un booléen indiquant si la case contient un joueur ou non,
 # c'est à dire autre chose que ROCHER,VIDE ou TRONC
-def estJoueur(val):
+def estJoueur(case):
     res = None
-    if val["contenu"] not in ["#", "T", " "]:
+    if not estRocher(case) or not estVide(case) or not estTronc(case):
         res = True
     else:
         res = False
@@ -35,7 +43,7 @@ def estJoueur(val):
 
 # Retourne un booléen indiquant si la cas est vide ou non
 def estVide(case):
-    if case["contenu"] == " ":
+    if case["contenu"] == VIDE:
         return True
     else:
         return False
@@ -57,7 +65,7 @@ def getContenu(case):
 def getCourant(case):
     courant = 'X'
     if case is not None:
-        courant = case["contenu"]
+        courant = case["courant"]
     return courant
 
 

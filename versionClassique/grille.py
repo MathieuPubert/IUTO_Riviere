@@ -101,10 +101,11 @@ def incDirectionGH(direction):
 def getNProchainsGH(grille, lig, col, direction, n=3):
     liste_NProchains = []
 
-    direction = incDirectionGH(direction)
+    vx, vy = incDirectionGH(direction)
     for i in range(n):
-        valeur = grille['valeurs'][lig + (direction[0] * i)][col + (direction[1] * i)]
-        liste_NProchains.append(valeur)
+        if (estPosGH(grille, (lig + vx * i), (col + vy * i))):
+            valeur = grille['valeurs'][lig + (vx * i)][col + (vy * i)]
+            liste_NProchains.append(valeur)
     return liste_NProchains
 
 

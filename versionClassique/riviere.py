@@ -123,8 +123,9 @@ def getNbObstacles(riviere, lig, col, direction, n=3):
 # a pas de joueur sur cette case
 def joueurArrive(r):
     arrivee = getContenuR(r, (getNbLigR(r) - 1), r["colArrivee"])
-    if estJoueur(getCase(r, (getNbLigR(r) - 1), r["colArrivee"])):
-        return getContenuR(arrivee, (getNbLigR(r) - 1), r["colArrivee"])
+    case = getCase(r, (getNbLigR(r) - 1), r["colArrivee"])
+    if estJoueur(arrivee):
+        return arrivee["contenu"]
     else:
         return None
 
@@ -146,18 +147,16 @@ def deplacementAutorise(riviere, lig, col, direction):
 # si il y en a un et None sinon
 def deplacer(riviere, lig, col, direction):
     joueur = None
-    depx, depy = incDirectionGH(direction)
+    vx, vy = incDirectionGH(direction)
 
-    if deplacementAutorise(riviere, lig, col, direction):
-        listecontcase = getNProchainsGH(getGrille(riviere), lig, col, direction)
+    nb_obst = getNbObstacles(riviere, lig, col, direction, 3)
 
-        for i in range(len(listecontcase) - 1, -1, -1):
-            cx, cy = listecontcase[i]
-            vx, vy = -depx, -depy
-            setContenuR(riviere, cx, cy, getContenuR(riviere, cx + vx, cy + vy))
+    for i in range(nb_obst, 0, -1):
+        setContenuR(riviere, (vx * i) + lig, (vy * i) + col,
+                    getContenuR(riviere, (vx * (i - 1)) + lig, (vy * (i - 1)) + col))
 
-    if estJoueur(getContenuR(riviere, lig + depx, col + depy)):
-        joueur = getContenuR(riviere, lig + depx, col + depy)
+    if estJoueur(getCase(riviere, lig + vx, col + vy)):
+        joueur = getContenuR(riviere, lig + vx, col + vy)
 
     return joueur
 
@@ -276,8 +275,20 @@ def lireRiviere(nomFic):
 
 # tests--------------------------------------------------------------------------
 if __name__ == '__main__':
-    river = lireRiviere('riviere1.txt')
+    river = lireRiviere('data/riviere1.txt')
     afficheRiviere(river)
+
+    flotte = (Riviere(6, 6, paire=True, colDepart=0, colArrivee=1))
+    setCase(flotte, 0, 0, Case(TRONC, "N"))
+    setContenuR(flotte, 0, 0, ROCHER)
+    setCourantR(flotte, 0, 0, "N")
+    viderArrivee(flotte)
+    setContenuR(flotte, 2, 4, 'I')
+    print(getNbObstacles(flotte, 0, 2, "O", n=3))
+    print(joueurArrive(flotte))
+    m = lireRiviere('data/riviere1.txt')
+    afficheRiviere(m)
+
 
     # flotte = (Riviere(6, 6, paire=True, colDepart=0, colArrivee=1))
     #

@@ -240,7 +240,8 @@ def positionerJoueurCourant(jeu):
     """
 
     if getPosJoueurCourant(jeu) == (-1, -1):
-        setContenuR(getRiviere(jeu), 0, getColDepart(getRiviere(jeu)), getJoueurCourant(getJoueursJ(jeu)))
+        setContenuR(getRiviere(jeu), 0, getColDepart(getRiviere(jeu)),
+                    getRepresentation(getJoueurCourant(getJoueursJ(jeu))))
 
 
 def finirDeplacement(jeu):
@@ -340,10 +341,8 @@ if __name__ == '__main__':
 
     initJeu(game)
 
-    print(getRiviere(game))
     afficheRiviere(getRiviere(game))
 
-    print(getClassement(game))
 
     for (nom, representation) in getJoueursPossibles(getJoueursJ(game)).items():
         ajouterJoueurJ(game, Joueur(nom, representation))
@@ -362,6 +361,6 @@ if __name__ == '__main__':
     calculerDirection(game, (2, 2))
     positionerJoueurCourant(game)
     finirDeplacement(game)
-    jouerDirection(game, 'N')
+    jouerDirection(game, 'S')
 
     print()
