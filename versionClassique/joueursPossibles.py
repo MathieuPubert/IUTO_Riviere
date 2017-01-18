@@ -1,4 +1,3 @@
-
 # Cette structure de données gère les noms et les représentations des joueurs
 # le nom permet de connaitre le nom du fichier qui contient l'image représentant le
 # joueur en mode graphique et le caractère représentant le joueur sur la grille
@@ -18,6 +17,7 @@ def JoueursPossibles():
 def lireJoueursPossibles(nomFic, joueursPossibles):
     """
     modifie une structure joueursPossibles
+    :param joueursPossibles: retour de JoueursPossibles()
     :param nomFic: string. Chemin vers le fichier contenant les joueurs
     :return: None. Modifie la structure
     """
@@ -27,8 +27,7 @@ def lireJoueursPossibles(nomFic, joueursPossibles):
             ajouterNom(joueursPossibles, nom, representation.strip('\n'))
 
 
-
-def ajouterNom(joueursPossibles,nom,representation):
+def ajouterNom(joueursPossibles, nom, representation):
     """
     Ajoute un joueur à la liste des joueurs possibles UNIQUEMENT si son nom ET sa representation n'existent pas.
     Sinon, il ne se produira rien
@@ -51,7 +50,7 @@ def getListeNomsJoueur(joueursPossibles):
     return list(joueursPossibles.keys())
 
 
-def getNomJoueur(joueursPossibles,representation):
+def getNomJoueur(joueursPossibles, representation):
     """
     Recherche un joueur par sa représentation
     :param joueursPossibles: dictionnaire. retour de JoueursPossibles()
@@ -65,11 +64,10 @@ def getNomJoueur(joueursPossibles,representation):
     return joueur
 
 
-        
-
-def getRepresentationJoueur(joueursPossibles,nom):
+def getRepresentationJoueur(joueursPossibles, nom):
     """
     Recherche la représentation en fonction de son nom
+    :param nom: string. nom du joueur
     :param joueursPossibles: dictionnaire. retour de JoueursPossibles()
     :return: string. Représentation du joueur. Chaine vide si inexistant
     """

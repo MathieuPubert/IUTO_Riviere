@@ -1,6 +1,7 @@
 from joueur import *
 from joueursPossibles import *
 
+
 # Cette structure de données gère une liste de joueurs, une liste de joueursPossibles
 # et un joueur courant. La liste des joueurs possibles permet de connaitre les noms
 # des joueurs qui peuvent participer à la descente de la rivière ainsi que leur représentation
@@ -25,9 +26,7 @@ def ListeJoueurs(joueursPossibles={}):
     return {'Possibles': joueursPossibles, 'Actifs': [], 'Courant': None}
 
 
-
-
-def indiceJoueur(joueurs,nom):
+def indiceJoueur(joueurs, nom):
     """
     Donne l'indice du joueur actif indentifié par nom
     :param joueurs: dictionnaire. Retour de la fonction ListeJoueurs()
@@ -43,7 +42,7 @@ def indiceJoueur(joueurs,nom):
     return indice
 
 
-def ajouterJoueur(joueurs,nom,humain=True):
+def ajouterJoueur(joueurs, nom, humain=True):
     """
     Ajoute un nouveau Joueur() dans les joueurs actifs s'il fait partie des joueurs possibles
     et le place en joueur courant si c'est le  premier joueur actif
@@ -56,9 +55,9 @@ def ajouterJoueur(joueurs,nom,humain=True):
         joueurs['Actifs'].append(Joueur(nom, joueurs['Possibles'][nom], humain))
         if len(joueurs['Actifs']) == 1:
             joueurs['Courant'] = joueurs['Actifs'][0]
-        
 
-def retirerJoueur(joueurs,nom):
+
+def retirerJoueur(joueurs, nom):
     """
     Cette fonction retire un joueur de la liste
     Si le joueur n'y était pas elle ne fait rien
@@ -106,7 +105,7 @@ def getJoueurCourant(joueurs):
     return joueurs['Courant']
 
 
-def getJoueurI(joueurs,i):
+def getJoueurI(joueurs, i):
     """
     Cette fonction retourne le nom du joueur numéro i (dans l'ordre où ils ont été ajoutés)
     i est un entier entre 0 et le nombre de joueurs de la liste -1
@@ -117,7 +116,7 @@ def getJoueurI(joueurs,i):
     return joueurs['Actifs'][i]
 
 
-def getJoueurRep(joueurs,representation):
+def getJoueurRep(joueurs, representation):
     """
     Recherche d'un joueur en fonction de sa representation
     :param joueurs: retour de la fonction ListeJoueurs()
