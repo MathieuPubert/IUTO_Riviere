@@ -66,8 +66,7 @@ def getContenuR(r, l, c):
 
 # met un objet (tronc, joueur, rocher) sur la case qui se trouve à la ligne l colonne c
 def setContenuR(r, l, c, contenu):
-    case = getCase(r, l, c)
-    setContenu(case, contenu)
+    setContenu(getCase(r, l, c), contenu)
 
 
 # retourne le courant de la case qui se trouve sur la case à la ligne l colonne c
@@ -89,7 +88,7 @@ def getGrille(r):
 
 # vérifie que la position (l,c) est bien une position de la rivière
 def estPosR(r, l, c):
-    return estPosGH(r, l, c)
+    return estPosGH(getGrille(r), l, c)
 
 
 # cette fonction enlève le contenu de la case arrivée de la rivière
@@ -277,14 +276,17 @@ def lireRiviere(nomFic):
 
 # tests--------------------------------------------------------------------------
 if __name__ == '__main__':
-    flotte = (Riviere(6, 6, paire=True, colDepart=0, colArrivee=1))
+    river = lireRiviere('riviere1.txt')
+    afficheRiviere(river)
 
-    setCase(flotte, 0, 0, Case(TRONC, "N"))
-
-    setContenuR(flotte, 0, 0, ROCHER)
-
-    setCourantR(flotte, 0, 0, "N")
-    viderArrivee(flotte)
-    setContenuR(flotte, 2, 4, 'I')
-    # print(getNbObstacles(flotte,0,0,"0",n=3))
-    print(joueurArrive(flotte))
+    # flotte = (Riviere(6, 6, paire=True, colDepart=0, colArrivee=1))
+    #
+    # setCase(flotte, 0, 0, Case(TRONC, "N"))
+    #
+    # setContenuR(flotte, 0, 0, ROCHER)
+    #
+    # setCourantR(flotte, 0, 0, "N")
+    # viderArrivee(flotte)
+    # setContenuR(flotte, 2, 4, 'I')
+    # # print(getNbObstacles(flotte,0,0,"0",n=3))
+    # print(joueurArrive(flotte))
