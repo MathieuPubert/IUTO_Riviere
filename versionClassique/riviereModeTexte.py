@@ -96,4 +96,5 @@ def jouer(jeu):
 
 if __name__ == '__main__':
     j = Jeu("./", "joueurs.txt", "riviere1.txt")
+    afficheJeu(j)
     jouer(j)

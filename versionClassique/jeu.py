@@ -238,7 +238,6 @@ def positionerJoueurCourant(jeu):
     :param jeu: retour de la fonction Jeu()
     :return: None. modifie jeu
     """
-
     if getPosJoueurCourant(jeu) == (-1, -1):
         setContenuR(getRiviere(jeu), 0, getColDepart(getRiviere(jeu)),
                     getRepresentation(getJoueurCourant(getJoueursJ(jeu))))
@@ -341,26 +340,35 @@ if __name__ == '__main__':
 
     initJeu(game)
 
-    afficheRiviere(getRiviere(game))
 
 
     for (nom, representation) in getJoueursPossibles(getJoueursJ(game)).items():
         ajouterJoueurJ(game, Joueur(nom, representation))
 
+    # print(getPosJoueurCourant(game))
+    positionerJoueurCourant(game)
+    # print(getPosJoueurCourant(game))
+
+
+    for dir in directions:
+        x, y = getPosJoueurCourant(game)
+        print(getJoueurCourantJ(game))
+        print(getRiviere(game), x, y, dir, sep='\n')
+        deplacer(getRiviere(game), x, y, dir)
+
+    afficheRiviere(getRiviere(game))
+
     getJoueursJ(game)
     getNbJoueursJ(game)
-    getJoueurCourantJ(game)
     getPosJoueur(game, 'INFORMATIQUE')
-    getPosJoueurCourant(game)
+
     getNbCoupsRestants(game)
     enleverCoupsRestants(game)
     enleverTousCoupsRestants(game)
     ajouterClassement(game, 'INFORMATIQUE')
-    joueurSuivantJ(game)
+    # joueurSuivantJ(game)
     verifDirection(game, 'N')
     calculerDirection(game, (2, 2))
     positionerJoueurCourant(game)
     finirDeplacement(game)
     jouerDirection(game, 'S')
-
-    print()

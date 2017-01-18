@@ -3,33 +3,38 @@
 # Cette grille contiendra nbLig lignes, nbCol colonnes.
 # si paire est à True la grille sera paire sinon elle sera impaire
 # valeur sera la valeur par défaut stockée dans chaque case de la grille
-def GrilleHexa(nbLig, nbCol, paire=True, valeur=''):
-    grille = {"nombre de lignes": nbLig, "nombre de colonnes": nbCol, "paire": paire, "valeurs": []}
 
-    i = 0
-    for i in range(nbLig):
-        valeurNone = [valeur, None] * (nbCol // 2)
-        noneValeur = [None, valeur] * (nbCol // 2)
-        if nbCol % 2 == 0:  # si le nb de colonnes est paire
-            if i % 2 == 0:  # si l'indice de la ligne est paire
-                grille["valeurs"].append(valeurNone)
-            else:  # si l'indice de la ligne est impair
-                grille["valeurs"].append(noneValeur)
+def GrilleHexa(nbLig, nbCol, paire=True, valeur=None):
+    grille = None
 
-        elif nbCol % 2 != 0:
-            noneValeur.append(None)
-            valeurNone.append(valeur)  # si le nb de colonnes est impaire
-            if not paire:  # si la grille est impaire
-                if i % 2 == 0:
-                    grille["valeurs"].append(noneValeur)
-                else:
+    if type(nbCol) is int and type(nbLig) is int and type(paire) is bool:
+        grille = {"nombre de lignes": nbLig, "nombre de colonnes": nbCol, "paire": paire, "valeurs": []}
+
+        i = 0
+        for i in range(nbLig):
+            valeurNone = [valeur, None] * (nbCol // 2)
+            noneValeur = [None, valeur] * (nbCol // 2)
+            if nbCol % 2 == 0:  # si le nb de colonnes est paire
+                if i % 2 == 0:  # si l'indice de la ligne est paire
                     grille["valeurs"].append(valeurNone)
-            else:
-                if paire:
-                    if i % 2 == 0:  # si la ligne est paire
-                        grille["valeurs"].append(valeurNone)
-                    else:
+                else:  # si l'indice de la ligne est impair
+                    grille["valeurs"].append(noneValeur)
+
+            elif nbCol % 2 != 0:
+                noneValeur.append(None)
+                valeurNone.append(valeur)  # si le nb de colonnes est impaire
+                if not paire:  # si la grille est impaire
+                    if i % 2 == 0:
                         grille["valeurs"].append(noneValeur)
+                    else:
+                        grille["valeurs"].append(valeurNone)
+                else:
+                    if paire:
+                        if i % 2 == 0:  # si la ligne est paire
+                            grille["valeurs"].append(valeurNone)
+                        else:
+                            grille["valeurs"].append(noneValeur)
+
     return grille
 
 
@@ -91,7 +96,7 @@ def incDirectionGH(direction):
                    'SE': (1, 1),
                    'SO': (1, -1)}
 
-    return d_direction.get(direction, (666, 666))
+    return d_direction.get(direction, (0, 0))
 
 
 # permet de retourner la liste des n valeurs qui se trouvent dans la grille
@@ -102,10 +107,14 @@ def getNProchainsGH(grille, lig, col, direction, n=3):
     liste_NProchains = []
 
     vx, vy = incDirectionGH(direction)
+    lig += vx
+    col += vy
+
     for i in range(n):
         if (estPosGH(grille, (lig + vx * i), (col + vy * i))):
             valeur = grille['valeurs'][lig + (vx * i)][col + (vy * i)]
             liste_NProchains.append(valeur)
+
     return liste_NProchains
 
 
@@ -169,18 +178,54 @@ def afficheGH(grille):
 
 # tests-------------------------------------------------
 if __name__ == '__main__':
-    grilleHexa = (GrilleHexa(20, 20, paire=True, valeur=2))
 
-    initAlphaGH(grilleHexa)
+    print('TEST des fonctions de grille.py : ')
 
-    afficheGH(grilleHexa)
+    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
+    print('GRILLE PAIRE : ')
+    even_grid = GrilleHexa(10, 10, True, None)
+    initAlphaGH(even_grid)
+    afficheGH(even_grid)
 
-    print('estPosGH(grilleHexa,3,3)--True :', estPosGH(grilleHexa, 3, 3))
-    print('estPosGH(grilleHexa,3,2)--False :', estPosGH(grilleHexa, 3, 2))
-    print('le nb de lignes est :', getNbLigGH(grilleHexa))
-    print('le nb de colonnes est :', getNbColGH(grilleHexa))
-    setValGH(grilleHexa, 3, 3, 7)
-    print(grilleHexa)
-    print('getValGH(grilleHexa,3,3) :', getValGH(grilleHexa, 3, 3))
-    print('direction : ', incDirectionGH('SE'))
-    print(getNProchainsGH(grilleHexa, 0, 0, 'SE', n=3))
+    print('getNbLigGH() : ', getNbLigGH(even_grid))
+    print('getNbColGH() : ', getNbColGH(even_grid))
+    print('estPaireGH() : ', estPaireGH(even_grid))
+
+    for x in range(getNbLigGH(even_grid)):
+        for y in range(getNbColGH(even_grid)):
+            print('________________________________________________________________________________ ')
+            print('COORDS : ', (x, y))
+            print('estPosGH() : ', estPosGH(even_grid, x, y))
+            print('getValGH() : ', getValGH(even_grid, x, y))
+
+            for dir in ['N', 'S', 'O', 'E', 'NE', 'NO', 'SE', 'SO', 'X']:
+                print('incDirectionGH() : ', incDirectionGH(dir), 'direction : ', dir)
+                print('getNPProchains() : ', getNProchainsGH(even_grid, x, y, dir))
+
+            print('setValGH() : ', setValGH(even_grid, x, y, "$"))
+            print('POST SET getValGH() : ', getValGH(even_grid, x, y))
+
+    print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ')
+    print('GRILLE IMPAIRE : ')
+    odd_grid = GrilleHexa(10, 9, True, None)
+    afficheGH(odd_grid)
+    initAlphaGH(odd_grid)
+
+    print('getNbLigGH() : ', getNbLigGH(odd_grid))
+    print('getNbColGH() : ', getNbColGH(odd_grid))
+    print('estPaireGH() : ', estPaireGH(odd_grid))
+
+    for x in range(getNbLigGH(odd_grid)):
+        for y in range(getNbColGH(odd_grid)):
+
+            print('________________________________________________________________________________ ')
+            print('COORDS : ', (x, y))
+            print('estPosGH() : ', estPosGH(odd_grid, x, y))
+            print('getValGH() : ', getValGH(odd_grid, x, y))
+
+            for dir in ['N', 'S', 'O', 'E', 'NE', 'NO', 'SE', 'SO', 'X']:
+                print('incDirectionGH() : ', incDirectionGH(dir), 'direction : ', dir)
+                print('getNPProchains() : ', getNProchainsGH(odd_grid, x, y, dir))
+
+            print('setValGH() : ', setValGH(odd_grid, x, y, "$"))
+            print('POST SET getValGH() : ', getValGH(odd_grid, x, y))

@@ -22,8 +22,12 @@ def ListeJoueurs(joueursPossibles={}):
     'Courant':None => None s'il n'y a aucun joueur courant. Structure Joueur() sinon.
     }
     """
+    l_joueurs = None
 
-    return {'Possibles': joueursPossibles, 'Actifs': [], 'Courant': None}
+    if joueursPossibles is not None:
+        l_joueurs = {'Possibles': joueursPossibles, 'Actifs': [], 'Courant': None}
+
+    return l_joueurs
 
 
 def indiceJoueur(joueurs, nom):
@@ -51,8 +55,8 @@ def ajouterJoueur(joueurs, nom, humain=True):
     :param humain: bool. True si le joueur est manipulé par un utilisateur
     :return: None. Modifie joueurs
     """
-    if nom in joueurs['Possibles']:
-        joueurs['Actifs'].append(Joueur(nom, joueurs['Possibles'][nom], humain))
+    if nom in getJoueursPossibles(joueurs):
+        joueurs['Actifs'].append(Joueur(nom, getRepresentationJoueur(getJoueursPossibles(joueurs), nom), humain))
         if len(joueurs['Actifs']) == 1:
             joueurs['Courant'] = joueurs['Actifs'][0]
 
@@ -115,7 +119,7 @@ def getJoueurI(joueurs, i):
     :param i: integer. Indice du joueur dans joueurs['Actifs']
     :return: structure Joueur()
     """
-    return joueurs['Actifs'][i]
+    return getNom(joueurs['Actifs'][i])
 
 
 def getJoueurRep(joueurs, representation):
@@ -157,39 +161,27 @@ def joueurSuivant(joueurs):
 ########################################################################################################################
 
 if __name__ == '__main__':
-    possibles = JoueursPossibles()
-    lireJoueursPossibles('data/joueurs.txt', possibles)
-    d_joueurs = ListeJoueurs(possibles)
+    print('TEST des fonctions de listeJoueurs.py : ')
 
-    # Affichage du résultat de l'import
-    print("Resultat de l'import:", getJoueursPossibles(d_joueurs))
+    joueurs = ListeJoueurs(JoueursPossibles())
+    lireJoueursPossibles('joueurs.txt', joueurs["Possibles"])
+    print('ListeJoueurs() : ', joueurs)
 
-    # Ajout de l'ensemble des joueurs possibles dans les joueurs actifs
-    for (nom, representation) in d_joueurs['Possibles'].items():
-        ajouterJoueur(d_joueurs, nom)
-        print("Ajout du joueur actif '{0}'".format(nom, representation))
+    for (nom, representation) in joueurs["Possibles"].items():
+        print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
+        ajouterJoueur(joueurs, nom, True)
 
-    # Affichage de diverses infos
+        print('getJoueursPossibles() : ', getJoueursPossibles(joueurs))
+        print('ListeJoueurs()["Actifs"]', joueurs["Actifs"])
+        print('getJoueurCourant() : ', getJoueurCourant(joueurs))
+        print('indiceJoueur() : ', indiceJoueur(joueurs, nom))
+        print('getJoueurI() : ', getJoueurI(joueurs, indiceJoueur(joueurs, nom)))
+        print('getJoueurRep() : ', getJoueurRep(joueurs, representation))
+        print('getJoueurSuivant() : ', joueurSuivant(joueurs))
+        print('RE-getJoueurCourant() : ', getJoueurCourant(joueurs))
+        print('retirerJoueur() : ', retirerJoueur(joueurs, nom))
+        print('RE - indiceJoueur() sur joueur supprimé : ', indiceJoueur(joueurs, nom))
+    print('viderJoueurs() : ', viderJoueurs(joueurs))
+    print('RE-getNbJoueurs() : ', getNbJoueurs(joueurs))
 
-    print('Nombre de joueurs actifs : ', getNbJoueurs(d_joueurs))
-    for (nom, representation) in d_joueurs["Possibles"].items():
-        # chaque nom correspond a sa representation ?
-        assert (Joueur(nom, representation, True) == getJoueurRep(d_joueurs, representation))
-        # chaque joueur à l'indice a t-il le bon nom ?
-        print("joueur à l'indice : ", indiceJoueur(d_joueurs, nom), getJoueurI(d_joueurs, indiceJoueur(d_joueurs, nom)))
-
-    for i in range(getNbJoueurs(d_joueurs)):
-        courant = getJoueurCourant(d_joueurs)
-        # Le joueur courant est-il l'actif à l'indice correspondant?
-        assert (getJoueurI(d_joueurs, i) == courant)
-        # Puis on les fait cycler
-        joueurSuivant(d_joueurs)
-        print(i, getJoueurI(d_joueurs, i), getJoueurCourant(d_joueurs))
-
-    retirerJoueur(d_joueurs, 'INFORMATIQUE')
-
-    print(d_joueurs)
-
-    viderJoueurs(d_joueurs)
-
-    print(d_joueurs)
+    print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ')

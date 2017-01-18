@@ -7,7 +7,11 @@ def Joueur(nom, representation, humain=True):
     :param humain: bool. True si le joueur est manipulé par un utilisateur (présumé humain).
     :return: Dictionnaire. {'Nom':nom, 'Pion':'representation, 'Humain':humain}
     """
-    return {'Nom': nom, 'Representation': representation, 'Humain': humain}
+    joueur = None
+
+    if type(nom) is str and type(representation) is str and type(humain) is bool:
+        joueur = {'Nom': nom, 'Representation': representation, 'Humain': humain}
+    return joueur
 
 
 def getNom(joueur):
@@ -16,7 +20,10 @@ def getNom(joueur):
     :param joueur: retour de la fonction Joueur()
     :return: string. Nom du joueur
     """
-    return joueur['Nom']
+    nom = None
+    if joueur is not None:
+        nom = joueur['Nom']
+    return nom
 
 
 def getRepresentation(joueur):
@@ -25,8 +32,10 @@ def getRepresentation(joueur):
     :param joueur: retour de la fonction Joueur()
     :return: string. Représentation du joueur
     """
-    print(joueur)
-    return joueur['Representation']
+    rep = None
+    if joueur is not None:
+        rep = joueur['Representation']
+    return rep
 
 
 def estHumain(joueur):
@@ -35,7 +44,10 @@ def estHumain(joueur):
     :param joueur: retour de la fonction Joueur()
     :return: bool. True si le joueur est manipulé par un utilisateur
     """
-    return joueur['Humain']
+    hum = None
+    if joueur is not None:
+        hum = joueur['Humain']
+    return hum
 
 
 ########################################################################################################################
@@ -43,13 +55,34 @@ def estHumain(joueur):
 ########################################################################################################################
 
 if __name__ == '__main__':
-    l_joueurs = [Joueur('Luc', 'L', True),
-                 Joueur('Marc', 'M', True),
-                 Joueur('Jean', 'J', True),
-                 Joueur('AI', 'A', False)]
+    print('TEST des fonctions de joueur.py : ')
+    l_noms = ['NOM_1', 'NOM_2', 'NOM_3', 'NOM_4', 'NOM_5', 'NOM_5', 'NOM_7']
 
-    for joueur in l_joueurs:
-        descriptif = "Le joueur {0} sera représenté par le symbole '{1}'. Il est manipulé par {2}".format(
-            getNom(joueur), getRepresentation(joueur),
-            ('un humain' * estHumain(joueur) + 'une IA' * (not estHumain(joueur))))
-        print(descriptif)
+    for representation in 'AZERTYUIOPQSDFGHJKLMWXCVBN':
+        for nom in l_noms:
+            for humain in (True, False):
+                print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
+                joueur = Joueur(nom, representation, humain)
+                print('Joueur() : ', joueur)
+
+                print('getNomr() : ', getNom(joueur))
+
+                print('getRepresentation() : ', getRepresentation(joueur))
+
+                print('estHumain() : ', estHumain(joueur))
+
+                print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ')
+
+    print('Test pour mauvais parametre :')
+    joueur = None
+    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
+    joueur = None
+    print('Joueur() : ', joueur)
+
+    print('getNomr() : ', getNom(joueur))
+
+    print('getRepresentation() : ', getRepresentation(joueur))
+
+    print('estHumain() : ', estHumain(joueur))
+
+    print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ')
