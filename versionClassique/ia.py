@@ -36,6 +36,8 @@ def choixDirection(jeu):
     for elem in direction:
         if verifDirection(jeu, elem) == DIRECTION_OK:
             listeDirectionVerif.append(direction[elem])
+    print ("testDebug :")
+    print (listeDirectionVerif)
     for a, b in direction.items():
         if b == min(listeDirectionVerif):
             return a
@@ -56,9 +58,12 @@ if __name__ == '__main__':
     print ("Test marquage(Riviere(12, 9, True, 0, 0),6,4) :")
     afficheGH(marquage(Riviere(12, 9, True, 0, 0),6,4))
 
-    #game=Jeu('./data/', 'joueurs.txt', 'riviere1.txt')
-    #initJeu(game)
-    #print ("Test choixDirection(game) :")
-    #choixDirection(game)
-    #print ("Test choixDirectionAlea(game) :")
-    #choixDirectionAlea(game)
+    game=Jeu('./data/', 'joueurs.txt', 'riviere1.txt')
+    initJeu(game)
+    for (nom, representation) in getJoueursPossibles(getJoueursJ(game)).items():
+        ajouterJoueurJ(game, Joueur(nom, representation))
+
+    print ("Test choixDirection(game) :")
+    choixDirection(game)
+    print ("Test choixDirectionAlea(game) :")
+    choixDirectionAlea(game)
