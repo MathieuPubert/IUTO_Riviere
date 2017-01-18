@@ -15,18 +15,26 @@ def Case(contenu, courant):
 # Retourne un booléen indiquant si la case contient un rocher ou non
 def estRocher(case):
     res = None
-    if case["contenu"] == "#":
+    if case["contenu"] == ROCHER:
         res = True
     else:
         res = False
     return res
 
 
+def estTronc(case):
+    res = None
+    if case["contenu"] == TRONC:
+        res = True
+    else:
+        res = False
+    return res
+
 # Retourne un booléen indiquant si la case contient un joueur ou non,
 # c'est à dire autre chose que ROCHER,VIDE ou TRONC
-def estJoueur(val):
+def estJoueur(case):
     res = None
-    if val["contenu"] not in ["#", "T", " "]:
+    if not estRocher(case) or not estVide(case) or not estTronc(case):
         res = True
     else:
         res = False
@@ -35,7 +43,7 @@ def estJoueur(val):
 
 # Retourne un booléen indiquant si la cas est vide ou non
 def estVide(case):
-    if case["contenu"] == " ":
+    if case["contenu"] == VIDE:
         return True
     else:
         return False
@@ -43,31 +51,45 @@ def estVide(case):
 
 # Retourne le contenu de la case
 def getContenu(case):
-    return case["contenu"]
+    contenu = VIDE
+    if case is not None:
+        contenu = case["contenu"]
+        if contenu is None:
+            contenu = VIDE
+            setContenu(case, contenu)
+    return contenu
 
 
 # Retourne la direction du courant de la case,
 # c'est-à-dire une des valeurs "X", "N", "S", "NO" etc. 
 def getCourant(case):
-    return case["courant"]
+    courant = 'X'
+    if case is not None:
+        courant = case["courant"]
+    return courant
 
 
 # Retourne la direction du courant de la case sous la forme
 # d'une des flèches
 def getCourantChar(case):
-    return directions[case["courant"]]
+    courchar = 'X'
+    if case is not None:
+        courchar = directions[case["courant"]]
+    return courchar
 
 
 # Place un courant sur la case le courant est une des valeurs
 # "X", "N", "S", "NO" etc. 
 def setCourant(case, courant):
-    case["courant"] = courant
+    if case is not None:
+        case["courant"] = courant
 
 
 # Place un objet sur une case, contenu est un caractère
 # parmi VIDE, TRONC, ROCHER ou le caractère représentant un joueur
 def setContenu(case, contenu):
-    case["contenu"] = contenu
+    if case is not None:
+        case["contenu"] = contenu
 
 
 # Permet simplement de récupérer la liste des directions possibles

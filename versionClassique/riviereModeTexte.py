@@ -94,5 +94,6 @@ def jouer(jeu):
         fini = rep not in 'oO'
 
 
-j = Jeu("./", "joueurs.txt", "riviere1.txt")
-jouer(j)
+if __name__ == '__main__':
+    j = Jeu("./", "joueurs.txt", "riviere1.txt")
+    jouer(j)

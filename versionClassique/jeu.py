@@ -87,7 +87,7 @@ def getJoueursJ(jeu):
     :param jeu: retour de la fonction Jeu()
     :return: liste [Joueur()]. liste des joueurs actifs
     """
-    return jeu["Joueurs"]["Actifs"]
+    return jeu["Joueurs"]
 
 
 def getNbJoueursJ(jeu):
@@ -112,10 +112,11 @@ def getPosJoueur(jeu, joueur):
     """
     Permet de retrouver la position d'un joueur sur le plateau en fonction de son nom
     :param jeu: retour de la fonction Jeu()
-    :param joueur : retour de la fonction Joueur()
+    :param joueur : string. nom du joueur
     :return: tuple(int,int). coordonnées du joueur
     """
-    return getPositionJoueur(getRiviere(jeu), getRepresentation(joueur))
+
+    return getPositionJoueur(getRiviere(jeu), getRepresentationJoueur(getJoueursPossibles(getJoueursJ(jeu)), joueur))
 
 
 def getPosJoueurCourant(jeu):
@@ -239,7 +240,8 @@ def positionerJoueurCourant(jeu):
     """
 
     if getPosJoueurCourant(jeu) == (-1, -1):
-        setContenuR(getRiviere(jeu), 0, getColDepart(getRiviere(jeu)), getJoueurCourant(getJoueursJ(jeu)))
+        setContenuR(getRiviere(jeu), 0, getColDepart(getRiviere(jeu)),
+                    getRepresentation(getJoueurCourant(getJoueursJ(jeu))))
 
 
 def finirDeplacement(jeu):
@@ -266,15 +268,17 @@ def finirDeplacement(jeu):
     for x in range(getNbLigR(getRiviere(jeu))):
         for y in range(getNbColR(getRiviere(jeu))):
 
-            # si on a un courant autre que fixe dans la case
-            if getCourantR(getRiviere(jeu), x, y) != 'X':
+            if estPosR(getRiviere(jeu), x, y):
 
-                # et que la case contient un element mobile
-                if not estRocher(getContenuR(getRiviere(jeu), x, y)):
-                    # alors on le bouge
-                    deplacer(getRiviere(jeu), x, y, getCourantR(getRiviere(jeu), x, y))
-                    # setContenuR(getRiviere(jeu),nouvx,nouvy, getContenuR(getRiviere(jeu, x, y)))
-                    # setContenuR(getRiviere(jeu), x, y, "VIDE")
+                # si on a un courant autre que fixe dans la case
+                if getCourantR(getRiviere(jeu), x, y) != 'X':
+
+                    # et que la case contient un element mobile
+                    if not estRocher(getCase(getRiviere(jeu), x, y)):
+                        # alors on le bouge
+                        deplacer(getRiviere(jeu), x, y, getCourantR(getRiviere(jeu), x, y))
+                        # setContenuR(getRiviere(jeu),nouvx,nouvy, getContenuR(getRiviere(jeu, x, y)))
+                        # setContenuR(getRiviere(jeu), x, y, "VIDE")
 
 
 def jouerDirection(jeu, direction):
@@ -327,3 +331,36 @@ def jouerDirection(jeu, direction):
                 viderArrivee(getRiviere(jeu))
 
     return sumstr
+
+
+###########################  TESTS
+
+if __name__ == '__main__':
+
+    game = Jeu('./data/', 'joueurs.txt', 'riviere1.txt')
+
+    initJeu(game)
+
+    afficheRiviere(getRiviere(game))
+
+
+    for (nom, representation) in getJoueursPossibles(getJoueursJ(game)).items():
+        ajouterJoueurJ(game, Joueur(nom, representation))
+
+    getJoueursJ(game)
+    getNbJoueursJ(game)
+    getJoueurCourantJ(game)
+    getPosJoueur(game, 'INFORMATIQUE')
+    getPosJoueurCourant(game)
+    getNbCoupsRestants(game)
+    enleverCoupsRestants(game)
+    enleverTousCoupsRestants(game)
+    ajouterClassement(game, 'INFORMATIQUE')
+    joueurSuivantJ(game)
+    verifDirection(game, 'N')
+    calculerDirection(game, (2, 2))
+    positionerJoueurCourant(game)
+    finirDeplacement(game)
+    jouerDirection(game, 'S')
+
+    print()

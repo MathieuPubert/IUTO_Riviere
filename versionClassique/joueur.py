@@ -21,7 +21,7 @@ def getNom(joueur):
 
 def getRepresentation(joueur):
     """
-    Donne le nom du joueur
+    Donne la representation du joueur
     :param joueur: retour de la fonction Joueur()
     :return: string. Représentation du joueur
     """
