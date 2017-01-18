@@ -10,66 +10,69 @@ from case import *
 # et n'ont pas de courant
 class Riviere(object):
     def __init__(self,nbLig,nbCol,paire, colDepart=0,colArrivee=0):
-        self.riviere={ "grille":None, "colDepart":colDepart, "colArrivee":colArrivee}
+        self.grille = None
+        self.nbLig = nbLig
+        self.nbCol = nbCol
+        self.paire = paire
+        self.colDepart = colDepart
+        self.colArrivee = colArrivee
         self.initRiviere(nbLig, nbCol, paire)
 
     # Cette fonction initialise une rivière avec des cases vides et sans courant
     def initRiviere(self,nbLig,nbCol,paire):
-        self.riviere["grille"]=GrilleHexa(nbLig,nbCol,paire)
-        for l in range(self.getNbLigR()):
-            for c in range(self.getNbColR()):
-                setValGH(self.riviere["grille"],l,c,Case(VIDE,'X'))
-
+        case = Case(VIDE,'X')
+        self.grille = GrilleHexa(nbLig,nbCol,paire,valeur=case)
+        print(self.grille)
 
 
     # retourne la colonne de départ de la rivière
     def getColDepart(self):
-        return self.riviere["colDepart"]
+        return self.colDepart
 
     # retourne la colonne d'arrivée de la rivière
     def getColArrivee(self):
-        return self.riviere["colArrivee"]
+        return self.colArrivee
 
     # retourne le nombre de lignes de la rivière
     def getNbLigR(self):
-        return getNbLigGH(self.getGrille())
+        return self.nbLig
 
     # retourne le nombre de colonnes de la rivière
     def getNbColR(self):
-        return self.getGrille().getNbColGH()
+        return self.nbCol
 
     # indique si la rivière est paire ou non
     def estPaireR(self):
-        return self.getGrille().estPaireGH()
+        return self.paire
 
     # retourne la case qui se trouve à la ligne l colonne c
     def getCase(self,l,c):
-        return self.getGrille().getValGH(l,c)
+        return self.grille[l][c]
 
     # met la case dans la rivière à la ligne l colonne c
     def setCase(self,l,c,case):
-        self.getGrille().setValGH(l,c,case)
+        self.grille[l][c] = val
 
 
     # retourne le contenu (l'objet) qui se trouve sur la case à la ligne l colonne c
     def getContenuR(self,l,c):
-        return self.getCase(l,c).getContenu()
+        return self.getCase(l,c)["contenu"]
 
     # met un objet (tronc, joueur, rocher) sur la case qui se trouve à la ligne l colonne c
     def setContenuR(self,l,c,contenu):
-        self.getCase(l, c).setContenu(contenu)
+        self.getCase(l,c)["contenu"] = contenu
 
     # retourne le courant de la case qui se trouve sur la case à la ligne l colonne c
     def getCourantR(self,l,c):
-        return self.getCase(r,l,c).getCourant()
+        return self.getCase(l,c)["courant"]
 
     # met le courant sur la case qui se trouve à la ligne l colonne c
     def setCourantR(self,l,c,courant):
-        self.getCase(r,l,c).setCourant(courant)
+        self.getCase(l,c)["courant"] = courant
 
     # recupère la grille qui représente la rivière
     def getGrille(self):
-        return self.riviere["grille"]
+        return self.grille
 
     # vérifie que la position (l,c) est bien une position de la rivière
     def estPosR(self,l,c):
@@ -77,13 +80,13 @@ class Riviere(object):
 
     # cette fonction enlève le contenu de la case arrivée de la rivière
     def viderArrivee(self):
-        self.setContenuR((self.getNbLigR()-1),self.riviere["colArrivee"],Case(VIDE,'X'))
+        self.setContenuR((self.nbLig-1),self.colArrivee,Case(VIDE,'X'))
 
     # retrouve la position (l,c) du joueur dont la représentation des repJoueur sur la grille
     # si le joueur n'est pas sur la grille la fonction retourne (-1,-1)
     def getPositionJoueur(r,repJoueur):
-        for l in range(self.getNbLigR()):
-            for c in range(self.getNbColR()):
+        for l in range(self.nbLig):
+            for c in range(self.nbCol):
                 if self.getContenuR(l,c) == repJoueur:
                     return (l,c)
                 else:
@@ -94,7 +97,7 @@ class Riviere(object):
     # n indique jusqu'à quelle distance on recherche les obstacles
     # un joueur est un obstacle
     def getNbObstacles(self,lig,col,direction,n=3):
-        listeVal=self.getGrille().getNProchainsGH(lig,col,direction,n)
+        listeVal=self.grille.getNProchainsGH(lig,col,direction,n)
         i=0
         while i<n and listeVal[i] == " ":
             i+=1
@@ -256,13 +259,14 @@ class Riviere(object):
 if __name__ == '__main__':
      r=(Riviere(6,6,True,0,1))
      print(r.getNbLigR())
-     #
-    #  r.setCase(0,0,Case(TRONC,"N"))
-     #
-    #  r.setContenuR(0,0,ROCHER)
-     #
-    #  r.setCourantR(0,0,"N")
-    #  r.viderArrivee()
-    #  r.setContenuR(2,4,'I')
-    #  #print(getNbObstacles(flotte,0,0,"0",n=3))
-    #  print(r.joueurArrive())
+     r.getCase(0,0)
+     #r.setCase(0,0,Case(TRONC,"N"))
+
+     r.setContenuR(0,0,ROCHER)
+
+     r.setCourantR(0,0,"N")
+     r.viderArrivee()
+     r.setContenuR(2,4,'I')
+     print(r.getCase(l,c))
+     print(getNbObstacles(flotte,0,0,"0",n=3))
+     print(r.joueurArrive())
