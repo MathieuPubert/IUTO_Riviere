@@ -54,8 +54,12 @@ def estPaireGH(grille):
 # de numéro paire d'une grille paire
 def estPosGH(grille, lig, col):
     estPos = False
-    if grille["valeurs"][lig][col] is not None:
-        estPos = True
+    if lig >= 0 and col >= 0:
+        if lig < getNbLigGH(grille) and col < getNbColGH(grille):
+            if estPaireGH(grille) and (lig + col) % 2 == 0:
+                estPos = True
+            elif not estPaireGH(grille) and (lig + col) % 2 == 1:
+                estPos = True
     return estPos
 
 
@@ -69,7 +73,6 @@ def getValGH(grille, lig, col):
 def setValGH(grille, lig, col, val):
     if estPosGH(grille, lig, col):
         grille["valeurs"][lig][col] = val
-
 
 # retourne un couple d'entier qui indique de combien de ligne et de combien
 # de colonnes il faut se déplacer pour aller dans une direction.
@@ -88,7 +91,7 @@ def incDirectionGH(direction):
                    'SE': (1, 1),
                    'SO': (1, -1)}
 
-    return d_direction[direction]
+    return d_direction.get(direction, (666, 666))
 
 
 # permet de retourner la liste des n valeurs qui se trouvent dans la grille
@@ -165,16 +168,10 @@ def afficheGH(grille):
 
 # tests-------------------------------------------------
 if __name__ == '__main__':
-    print(GrilleHexa(4, 5, paire=False, valeur=2))
-    print('GrilleHexa(4,5,paire=True,valeur=2)', GrilleHexa(4, 5, paire=True, valeur=2))
-    print(GrilleHexa(6, 10, paire=False, valeur=2))
-    grilleHexa = (GrilleHexa(4, 5, paire=True, valeur=2))
+    grilleHexa = (GrilleHexa(20, 20, paire=True, valeur=2))
 
     initAlphaGH(grilleHexa)
 
-    setValGH(grilleHexa, 0, 1, 'D')
-    setValGH(grilleHexa, 1, 0, 'B')
-    print(grilleHexa)
     afficheGH(grilleHexa)
 
     print('estPosGH(grilleHexa,3,3)--True :', estPosGH(grilleHexa, 3, 3))

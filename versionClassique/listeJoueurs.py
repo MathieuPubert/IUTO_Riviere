@@ -68,10 +68,12 @@ def retirerJoueur(joueurs, nom):
     :return: None. Modifie joueurs
     """
     i = 0
-    while i < len(joueurs['Actifs']):
+    trouve = False
+    while i < len(joueurs['Actifs']) and not trouve:
         if getNom(getJoueurCourant(joueurs)) == nom:
             joueurSuivant(joueurs)
         if getNom(joueurs['Actifs'][i]) == nom:
+            trouve = True
             joueurs['Actifs'].pop(i)
         i += 1
     if joueurs['Actifs'] == []:

@@ -43,31 +43,45 @@ def estVide(case):
 
 # Retourne le contenu de la case
 def getContenu(case):
-    return case["contenu"]
+    contenu = VIDE
+    if case is not None:
+        contenu = case["contenu"]
+        if contenu is None:
+            contenu = VIDE
+            setContenu(case, contenu)
+    return contenu
 
 
 # Retourne la direction du courant de la case,
 # c'est-à-dire une des valeurs "X", "N", "S", "NO" etc. 
 def getCourant(case):
-    return case["courant"]
+    courant = 'X'
+    if case is not None:
+        courant = case["contenu"]
+    return courant
 
 
 # Retourne la direction du courant de la case sous la forme
 # d'une des flèches
 def getCourantChar(case):
-    return directions[case["courant"]]
+    courchar = 'X'
+    if case is not None:
+        courchar = directions[case["courant"]]
+    return courchar
 
 
 # Place un courant sur la case le courant est une des valeurs
 # "X", "N", "S", "NO" etc. 
 def setCourant(case, courant):
-    case["courant"] = courant
+    if case is not None:
+        case["courant"] = courant
 
 
 # Place un objet sur une case, contenu est un caractère
 # parmi VIDE, TRONC, ROCHER ou le caractère représentant un joueur
 def setContenu(case, contenu):
-    case["contenu"] = contenu
+    if case is not None:
+        case["contenu"] = contenu
 
 
 # Permet simplement de récupérer la liste des directions possibles
