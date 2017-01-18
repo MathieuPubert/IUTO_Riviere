@@ -47,3 +47,13 @@ def choixDirectionAlea(jeu):
         if verifDirection(jeu, direction) == DIRECTION_OK:
             aux.append(direction)
     return random.choice(aux)
+
+# TESTS
+if __name__ == '__main__':
+    print ("Test marquage(Riviere(20, 5, True, 0, 0),7,3) :")
+    afficheGH(marquage(Riviere(20, 5, True, 0, 0),7,3)
+    print("test")
+    print ("Test choixDirection((./data, joueurs.txt, riviere1.txt)) :")
+    choixDirection(('./data', 'joueurs.txt', 'riviere1.txt'))
+    print ("Test choixDirectionAlea((./data, joueurs.txt, riviere1.txt)) :")
+    choixDirectionAlea(('./data', 'joueurs.txt', 'riviere1.txt'))
