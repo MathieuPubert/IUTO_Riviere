@@ -47,12 +47,11 @@ class Riviere(object):
 
     # retourne la case qui se trouve à la ligne l colonne c
     def getCase(self,l,c):
-        return self.grille[l][c]
+        return self.grille["valeurs"][l][c]
 
     # met la case dans la rivière à la ligne l colonne c
     def setCase(self,l,c,case):
-        self.grille[l][c] = val
-
+        self.grille["valeurs"][l][c] = case
 
     # retourne le contenu (l'objet) qui se trouve sur la case à la ligne l colonne c
     def getContenuR(self,l,c):
@@ -257,16 +256,17 @@ class Riviere(object):
 
 # tests--------------------------------------------------------------------------
 if __name__ == '__main__':
-     r=(Riviere(6,6,True,0,1))
+     r=(Riviere(6,6,0,0))
+     r.afficheRiviere
      print(r.getNbLigR())
-     r.getCase(0,0)
-     #r.setCase(0,0,Case(TRONC,"N"))
+     print(r.getCase(0,0))
+     r.setCase(0,0,Case(TRONC,"N"))
 
      r.setContenuR(0,0,ROCHER)
 
      r.setCourantR(0,0,"N")
      r.viderArrivee()
      r.setContenuR(2,4,'I')
-     print(r.getCase(l,c))
-     print(getNbObstacles(flotte,0,0,"0",n=3))
+     print(r)
+     print(getNbObstacles(r,0,0,"0",n=3))
      print(r.joueurArrive())
