@@ -47,7 +47,10 @@ def getListeNomsJoueur(joueursPossibles):
     :param joueursPossibles: dictionnaire. retour de JoueursPossibles()
     :return: liste. Clés du dictionnaire
     """
-    return list(joueursPossibles.keys())
+    l_joueurs = None
+    if joueursPossibles is not None:
+        l_joueurs = list(joueursPossibles.keys())
+    return l_joueurs
 
 
 def getNomJoueur(joueursPossibles, representation):
@@ -58,9 +61,10 @@ def getNomJoueur(joueursPossibles, representation):
     :return: string. Nom du joueur, None si joueur inexistant
     """
     joueur = None
-    for (nom, token) in joueursPossibles.items():
-        if representation == token:
-            joueur = nom
+    if joueursPossibles is not None and type(representation) is str:
+        for (nom, token) in joueursPossibles.items():
+            if representation == token:
+                joueur = nom
     return joueur
 
 
@@ -71,7 +75,11 @@ def getRepresentationJoueur(joueursPossibles, nom):
     :param joueursPossibles: dictionnaire. retour de JoueursPossibles()
     :return: string. Représentation du joueur. Chaine vide si inexistant
     """
-    return joueursPossibles.get(nom, '')
+    rep = None
+
+    if joueursPossibles is not None and type(nom) is str:
+        rep = joueursPossibles.get(nom, '$')
+    return rep
 
 
 ########################################################################################################################
@@ -79,13 +87,24 @@ def getRepresentationJoueur(joueursPossibles, nom):
 ########################################################################################################################
 
 if __name__ == '__main__':
-    possibles = JoueursPossibles()
-    lireJoueursPossibles('data/joueurs.txt', possibles)
-    ajouterNom(possibles, 'ErreurRepresentation', 'C')
-    ajouterNom(possibles, 'GEA', 'ErreurNom')
+    print('TEST des fonctions de joueursPossibles.py : ')
 
-    # Parcours de la structure
-    print('\n', 'PRESENTATION DES JOUEURS')
-    for (nom, representation) in possibles.items():
-        print("Voici le joueur '{0}'. Il sera représenté par le symbole '{1}'.".format(
-            getNomJoueur(possibles, representation), getRepresentationJoueur(possibles, nom)))
+    possibles = JoueursPossibles()
+
+    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
+    print('JoueursPossibles() : ', possibles)
+
+    print('lireJoueursPossibles() : ', lireJoueursPossibles('joueurs.txt', possibles))
+    print(possibles)
+
+    print('ajouterNom() : ', ajouterNom(possibles, 'Nouveau', 'Nouvelle'))
+    print('ajouterNom() : ', ajouterNom(possibles, 'ERREUR', 'I'))
+    print('ajouterNom() : ', ajouterNom(possibles, 'INFORMATIQUE', 'Erreur'))
+
+    print('getListeNomsJoueurs() : ', getListeNomsJoueur(possibles))
+
+    print('getNomJoueur() : ', getNomJoueur(possibles, 'I'))
+
+    print('getRepresentationJoueur() : ', getRepresentationJoueur(possibles, 'INFORMATIQUE'))
+
+    print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ')

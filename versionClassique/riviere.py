@@ -10,8 +10,11 @@ from case import *
 # cette fonction créer une rivière dont toutes les cases contiennent VIDE
 # et n'ont pas de courant
 def Riviere(nbLig, nbCol, paire=True, colDepart=0, colArrivee=0):
-    riviere = {"grille": None, "colDepart": colDepart, "colArrivee": colArrivee}
-    initRiviere(riviere, nbLig, nbCol, paire)
+    riviere = None
+    if type(nbCol) is int and type(nbLig) is int and type(paire) is bool and type(colDepart) is int and type(
+            colArrivee) is int:
+        riviere = {"grille": None, "colDepart": colDepart, "colArrivee": colArrivee}
+        initRiviere(riviere, nbLig, nbCol, paire)
     return riviere
 
 
@@ -88,24 +91,34 @@ def getGrille(r):
 
 # vérifie que la position (l,c) est bien une position de la rivière
 def estPosR(r, l, c):
+
     return estPosGH(getGrille(r), l, c)
 
 
 # cette fonction enlève le contenu de la case arrivée de la rivière
 def viderArrivee(riviere):
-    setContenuR(riviere, (getNbLigR(riviere) - 1), riviere["colArrivee"], Case(VIDE, 'X'))
+    setContenuR(riviere, (getNbLigR(riviere) - 1), riviere["colArrivee"], VIDE)
 
 
 # retrouve la position (l,c) du joueur dont la représentation des repJoueur sur la grille
 # si le joueur n'est pas sur la grille la fonction retourne (-1,-1)
 def getPositionJoueur(r, repJoueur):
-    for l in range(getNbLigR(r)):
-        for c in range(getNbColR(r)):
-            if getContenuR(r, l, c) == repJoueur:
-                return l, c
-            else:
-                return -1, -1
 
+    jx=-1
+    jy=-1
+
+    x=-1
+    while x<getNbLigR(r) and jx == -1:
+        x += 1
+        y=-1
+        while y<getNbColR(r) and jy == -1:
+            y += 1
+
+            if getContenuR(r,x,y) == repJoueur:
+                (jx,jy) = (x,y)
+
+    #print('riviere.py/ getPositionJoueur', getContenuR(r, x, y), x, y, jx, jy)
+    return (jx,jy)
 
 # permet de compter combien il y a d'obstacles contigues devant la case lig,col
 # en allant dans la direction direction
@@ -114,28 +127,32 @@ def getPositionJoueur(r, repJoueur):
 def getNbObstacles(riviere, lig, col, direction, n=3):
     listeVal = getNProchainsGH(getGrille(riviere), lig, col, direction, n)
     i = 0
-    while i < n and listeVal[i] == " ":
-        i += 1
-    return i
+    nbobst=0
+    while i < len(listeVal) and nbobst<3:
+        if getContenu(listeVal[i]) != VIDE:
+            nbobst += 1
+        i+=1
+    return nbobst
 
 
 # retourne le nom du joueur qui se trouve sur la case d'arrivée et None si il n'y
 # a pas de joueur sur cette case
 def joueurArrive(r):
-    arrivee = getContenuR(r, (getNbLigR(r) - 1), r["colArrivee"])
-    case = getCase(r, (getNbLigR(r) - 1), r["colArrivee"])
+    winner=None
+    arrivee = getCase(r, (getNbLigR(r) - 1), r["colArrivee"])
+
     if estJoueur(arrivee):
-        return arrivee["contenu"]
-    else:
-        return None
+        winner= getContenu(arrivee)
+    return winner
 
 
 # cette fonction verifie que le déplacement partant de la case en position (lig,col)
 # en direction de direction est bien possible
 def deplacementAutorise(riviere, lig, col, direction):
     autorise = False
-    if getNbObstacles(riviere, lig, col, direction) < 3:
-        if estPosR(riviere, lig, col):
+    vx,vy = incDirectionGH(direction)
+    if getNbObstacles(riviere, lig, col, direction) <3:
+        if estPosR(riviere, lig+vx, col+vy):
             autorise = True
     return autorise
 
@@ -149,24 +166,33 @@ def deplacer(riviere, lig, col, direction):
     joueur = None
     vx, vy = incDirectionGH(direction)
 
-    nb_obst = getNbObstacles(riviere, lig, col, direction, 3)
+    if getContenuR(riviere, lig+vx, col+vy) == VIDE:
+        setContenuR(riviere,lig+vx, col+vy, getContenuR(riviere, lig , col ))
+        setContenuR(riviere, lig, col, VIDE)
 
-    for i in range(nb_obst, 0, -1):
-        setContenuR(riviere, (vx * i) + lig, (vy * i) + col,
-                    getContenuR(riviere, (vx * (i - 1)) + lig, (vy * (i - 1)) + col))
-
-    if estJoueur(getCase(riviere, lig + vx, col + vy)):
-        joueur = getContenuR(riviere, lig + vx, col + vy)
+    else:
+        if getContenuR(riviere, lig+vx, col+vy) != ROCHER:
+            #ce qu'il y a devant se deplace si il peut
+            if deplacementAutorise(riviere, lig+vx, col+vy, direction):
+                deplacer(riviere, lig+vx, col+vy, direction)
 
     return joueur
 
 
-# # Cette fonction retourne la position (lig,col) de l'objet qui se trouve sur
-# # une case courant qui a le moins d'objet devant lui et qui se trouve le plus au
-# # nord ouest possible
-# # si aucun objet n'est à dans ce cas la fonction retourne (-1,-1)
-# def getMinADeplacer(r):
-#     pass
+# Cette fonction retourne la position (lig,col) de l'objet qui se trouve sur
+# une case courant qui a le moins d'objet devant lui et qui se trouve le plus au
+# nord ouest possible
+# si aucun objet n'est à dans ce cas la fonction retourne (-1,-1)
+def getMinADeplacer(r):
+    pos=(-1,-1)
+    for x in getNbLigR(r):
+        for y in getNbColR(r):
+            if getCourantR(r, x, y):
+                if getContenuR(r, x, y) != VIDE:
+                    if getContenuR(r, x, y) != ROCHER:
+                        pos=(x,y)
+    return pos
+
 
 
 
@@ -203,7 +229,10 @@ def afficheRiviere(riviere):
         prem = ''
         for j in range(debut, nbCol, 2):
             c = getValGH(grille, i, j)
-            print(prem + '/' + getContenu(c) + '\\', end='')
+
+            contenu=getContenu(c)
+
+            print(prem + '/' + contenu + '\\', end='')
             if i == 0 or j == getNbColGH(grille) - 1:
                 prem = "_"
             else:
@@ -275,29 +304,56 @@ def lireRiviere(nomFic):
 
 # tests--------------------------------------------------------------------------
 if __name__ == '__main__':
-    river = lireRiviere('data/riviere1.txt')
-    afficheRiviere(river)
 
-    flotte = (Riviere(6, 6, paire=True, colDepart=0, colArrivee=1))
-    setCase(flotte, 0, 0, Case(TRONC, "N"))
-    setContenuR(flotte, 0, 0, ROCHER)
-    setCourantR(flotte, 0, 0, "N")
-    viderArrivee(flotte)
-    setContenuR(flotte, 2, 4, 'I')
-    print(getNbObstacles(flotte, 0, 2, "O", n=3))
-    print(joueurArrive(flotte))
-    m = lireRiviere('data/riviere1.txt')
-    afficheRiviere(m)
+    print('TEST des fonctions de riviere.py : ')
+    r_list = [lireRiviere('riviere1.txt'), lireRiviere('riviere2.txt')]
+    for river in r_list:
+        print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
+        print('RIVIERE 1 : ')
 
 
-    # flotte = (Riviere(6, 6, paire=True, colDepart=0, colArrivee=1))
-    #
-    # setCase(flotte, 0, 0, Case(TRONC, "N"))
-    #
-    # setContenuR(flotte, 0, 0, ROCHER)
-    #
-    # setCourantR(flotte, 0, 0, "N")
-    # viderArrivee(flotte)
-    # setContenuR(flotte, 2, 4, 'I')
-    # # print(getNbObstacles(flotte,0,0,"0",n=3))
-    # print(joueurArrive(flotte))
+
+        print('getNbLigR() : ', getNbLigR(river))
+        print('getNbColR() : ', getNbColR(river))
+        print('estPaireR() : ', estPaireR(river))
+        print('getColDepart() : ', getColDepart(river))
+        print('estColArrivee() : ', getColArrivee(river))
+        print('getGrille() : ', getGrille(river))
+
+
+        for x in range(getNbLigR(river)):
+            for y in range(getNbColR(river)):
+                rannum = str(random.randint(0, 9))
+                rancont = str(random.randint(0, 9))
+                randir = random.choice(getDirections())
+                print('estPosR() : ', estPosR(river, x, y), (x,y))
+
+                if estPosR(river,x,y):
+                    print('________________________________________________________________________________ ')
+
+                    print('COORDS : ', (x, y))
+                    print('setCase() : ', setCase(river, x, y, Case(rannum, 'X')), rannum)
+                    print('getCase() : ', getCase(river, x, y))
+                    print('setContenuR() : ', setContenuR(river, x, y, rancont), rancont)
+                    print('getContenuR() : ', getContenuR(river, x, y))
+                    print('setCourantR() : ', setCourantR(river, x, y, randir), randir)
+                    print('getCourantR() : ', getCourantR(river, x, y))
+
+
+                    print('On met une case Tronc sur arrivee => setCase() : ', setCase(river, getNbLigR(river)-1, getColDepart(river), Case(TRONC, 'X')), getCase(river, getNbLigR(river)-1, getColDepart(river)))
+                    print('viderArrivee() : ', viderArrivee(river), getCase(river, getNbLigR(river)-1, getColArrivee(river)))
+                    if estPaireR(river):
+                        print('On met une case Joueur => setCase() : ', setCase(river, 3, 3, Case('I', 'X')), getCase(river, 3, 3))
+                    else:
+                        print('On met une case Joueur => setCase() : ', setCase(river, 3, 4, Case('I', 'X')), getCase(river, 3, 4))
+                    print('getPositionJoueur() : ', getPositionJoueur(river, 'I'))
+                    for dir in directions:
+                        print('getNbObstacles() : ', getNbObstacles(river, x, y, dir))
+                        print('deplacementAutorise() : ', deplacementAutorise(river, x, y, dir), dir)
+                        print('deplacer() : ', deplacer(river, x, y, dir))
+                    afficheRiviere(river)
+
+        print('On met une case Joueur a la fin  => setCase() : ', setCase(river, getNbLigR(river) - 1, getColArrivee(river), Case('I', 'X')))
+        print('joueurArrive() : ', joueurArrive(river))
+
+        print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ')

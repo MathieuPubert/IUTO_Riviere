@@ -9,61 +9,56 @@ VIDE = " "
 
 # Création d'un case
 def Case(contenu, courant):
-    return {"contenu": contenu, "courant": courant}
+    case = None
+    if courant in directions:
+        case = {"contenu": contenu, "courant": courant}
+    return case
 
 
 # Retourne un booléen indiquant si la case contient un rocher ou non
 def estRocher(case):
-    res = None
-    if case["contenu"] == ROCHER:
+    res = False
+    if getContenu(case) == ROCHER:
         res = True
-    else:
-        res = False
     return res
 
 
 def estTronc(case):
-    res = None
-    if case["contenu"] == TRONC:
+    res = False
+    if getContenu(case) == TRONC:
         res = True
-    else:
-        res = False
     return res
 
 # Retourne un booléen indiquant si la case contient un joueur ou non,
 # c'est à dire autre chose que ROCHER,VIDE ou TRONC
 def estJoueur(case):
-    res = None
-    if not estRocher(case) or not estVide(case) or not estTronc(case):
+    res = False
+    if not estRocher(case) and not estVide(case) and not estTronc(case) and case is not None:
         res = True
-    else:
-        res = False
     return res
 
 
 # Retourne un booléen indiquant si la cas est vide ou non
 def estVide(case):
-    if case["contenu"] == VIDE:
-        return True
-    else:
-        return False
+    res = False
+    if getContenu(case) == VIDE:
+        res = True
+    return res
+
 
 
 # Retourne le contenu de la case
 def getContenu(case):
-    contenu = VIDE
+    contenu = None
     if case is not None:
         contenu = case["contenu"]
-        if contenu is None:
-            contenu = VIDE
-            setContenu(case, contenu)
     return contenu
 
 
 # Retourne la direction du courant de la case,
 # c'est-à-dire une des valeurs "X", "N", "S", "NO" etc. 
 def getCourant(case):
-    courant = 'X'
+    courant = None
     if case is not None:
         courant = case["courant"]
     return courant
@@ -72,9 +67,9 @@ def getCourant(case):
 # Retourne la direction du courant de la case sous la forme
 # d'une des flèches
 def getCourantChar(case):
-    courchar = 'X'
+    courchar = None
     if case is not None:
-        courchar = directions[case["courant"]]
+        courchar = directions[getCourant(case)]
     return courchar
 
 
@@ -103,16 +98,68 @@ def getDirections():
 
 # TESTS
 if __name__ == '__main__':
-    print('DIRECTIONS POSSIBLES :', getDirections())
-    # Obtention des informations de cases
-    l_case = [Case("#", "X"), Case("T", "N"), Case(" ", "NO"), Case("J1", "S"), Case("J2", "X")]
-    for case in l_case:
-        print('--------------------------------------------------------------------------------')
-        print('CASE :', case)
-        print('VERIFICATION CONTENU :', 'Joueur' * estJoueur(case), 'Rocher' * estRocher(case), 'Vide' * estVide(case))
-        print('CONTENU : ', getContenu(case))
-        print('COURANT : ', getCourant(case), getCourantChar(case))
-        setCourant(case, 'N')
-        print('COURANT CHANGE POUR NORD: ', getCourant(case), getCourantChar(case))
-        setContenu(case, VIDE)
-        print('CONTENU CHANGE POUR VIDE: ', getContenu(case))
+    print('TEST des fonctions de case.py : ')
+
+    print('Bonnes Valeurs: ')
+    for contenu in 'AZERTYUIOPQSDFGHJKLMLWXCVBN' + ROCHER + VIDE + TRONC:
+        for courant in directions:
+            print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
+            case = Case(contenu, courant)
+            print('Case() : ', case)
+
+            print('estRocher() : ', estRocher(case))
+
+            print('estTronc() : ', estTronc(case))
+
+            print('estVide() : ', estVide(case))
+
+            print('estJoueur() : ', estJoueur(case))
+
+            print('getContenu() : ', getContenu(case))
+
+            print('getCourant() : ', getCourant(case))
+
+            print('getCourantChar() : ', getCourantChar(case))
+
+            print('setContenu() : ', setContenu(case, '$'))
+
+            print('setCourant() : ', setCourant(case, 'X'))
+
+            print('getDirections() : ', getDirections())
+
+            print('RE - getContenu() : ', getContenu(case))
+            print('RE - getCourant() : ', getCourant(case))
+            print('RE - getCourantChar() : ', getCourantChar(case))
+            print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ')
+
+    print('Mauvaises Valeurs: ')
+    for contenu in [1, True, [], ()]:
+        for courant in 'AZRTYUIP':
+            print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
+            case = Case(contenu, courant)
+            print('Case() : ', case)
+
+            print('estRocher() : ', estRocher(case))
+
+            print('estTronc() : ', estTronc(case))
+
+            print('estVide() : ', estVide(case))
+
+            print('estJoueur() : ', estJoueur(case))
+
+            print('getContenu() : ', getContenu(case))
+
+            print('getCourant() : ', getCourant(case))
+
+            print('getCourantChar() : ', getCourantChar(case))
+
+            print('setContenu() : ', setContenu(case, '$'))
+
+            print('setCourant() : ', setCourant(case, 'X'))
+
+            print('getDirections() : ', getDirections())
+
+            print('RE - getContenu() : ', getContenu(case))
+            print('RE - getCourant() : ', getCourant(case))
+            print('RE - getCourantChar() : ', getCourantChar(case))
+            print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ')

@@ -64,13 +64,13 @@ def jouerUnePartie(jeu):
     attenteDirection = True
     afficheJeu(jeu)
     while getNbJoueursJ(jeu) != 0:
-        time.sleep(0.1)
+        time.sleep(0.5)
         if attenteDirection:
             joueurCourant = getJoueurCourantJ(jeu)
             if estHumain(joueurCourant):
                 direction = saisirDirection()
             else:
-                direction = choixDirection(jeu)
+                direction = choixDirectionAlea(jeu)
             attenteDirection = False
         else:
             if getNbCoupsRestants(jeu) == 0:
