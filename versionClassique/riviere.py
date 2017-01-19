@@ -152,7 +152,7 @@ def deplacementAutorise(riviere, lig, col, direction):
 
     autorise = False
     vx,vy = incDirectionGH(direction)
-    if getNbObstacles(riviere, lig, col, direction,2)<2:
+    if getNbObstacles(riviere, lig, col, direction,2)<=2:
         if estPosR(riviere, lig+vx, col+vy) :
             if not estRocher(getCase(riviere,lig+vx, col+vy)):
                 autorise = True
