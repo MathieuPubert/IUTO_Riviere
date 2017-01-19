@@ -9,55 +9,66 @@ VIDE = " "
 
 # Création d'un case
 class Case(object):
-    def __init__(self, contenu, courant):
-        self.contenu = contenu
-        self.courant = courant
+    def __init__(self,contenu,courant):
+        self.contenu=contenu
+        self.courant=courant
+
 
     # Retourne un booléen indiquant si la case contient un rocher ou non
     def estRocher(self):
-        res = None
-        if self.contenu == "#":
+        res = False
+        if self.getContenu() == ROCHER:
             res = True
-        else:
-            res = False
+        return res
+
+
+    def estTronc(self):
+        res = False
+        if self.getContenu() == TRONC:
+            res = True
         return res
 
     # Retourne un booléen indiquant si la case contient un joueur ou non,
     # c'est à dire autre chose que ROCHER,VIDE ou TRONC
     def estJoueur(self):
-        res = None
-        if self.contenu not in ["#", "T", " "]:
+        res = False
+        if not self.estRocher() and not self.estVide() and not self.estTronc():
             res = True
-        else:
-            res = False
         return res
+
 
     # Retourne un booléen indiquant si la cas est vide ou non
     def estVide(self):
-        if self.contenu == " ":
-            return True
-        else:
-            return False
+        res = False
+        if self.getContenu() == VIDE:
+            res = True
+        return res
 
-        # Retourne le contenu de la case
 
+
+    # Retourne le contenu de la case
     def getContenu(self):
         return self.contenu
+
 
     # Retourne la direction du courant de la case,
     # c'est-à-dire une des valeurs "X", "N", "S", "NO" etc.
     def getCourant(self):
         return self.courant
 
+
     # Retourne la direction du courant de la case sous la forme
     # d'une des flèches
     def getCourantChar(self):
-        return directions[self.courant]
+        courchar = directions[self.getCourant()]
+        return courchar
+
 
     # Place un courant sur la case le courant est une des valeurs
     # "X", "N", "S", "NO" etc.
     def setCourant(self, courant):
         self.courant = courant
+
 
     # Place un objet sur une case, contenu est un caractère
     # parmi VIDE, TRONC, ROCHER ou le caractère représentant un joueur
@@ -65,27 +76,79 @@ class Case(object):
         self.contenu = contenu
 
 
-# Permet simplement de récupérer la liste des directions possibles
-# Il faut que votre fonction se réfère au dictionnaire directions
-def getDirections():
-    res = []
-    for elem in directions.keys():
-        res.append(elem)
-    return res
+    # Permet simplement de récupérer la liste des directions possibles
+    # Il faut que votre fonction se réfère au dictionnaire directions
+    def getDirections(self):
+        res = []
+        for elem in directions.keys():
+            res.append(elem)
+        return res
 
 
 # TESTS
 if __name__ == '__main__':
-    print('DIRECTIONS POSSIBLES :', getDirections())
-    # Obtention des informations de cases
-    l_case = [Case("#", "X"), Case("T", "N"), Case(" ", "NO"), Case("J1", "S"), Case("J2", "X")]
-    for case in l_case:
-        print('--------------------------------------------------------------------------------')
-        print('VERIFICATION CONTENU :', 'Joueur' * case.estJoueur(), 'Rocher' * case.estRocher(),
-              'Vide' * case.estVide())
-        print('CONTENU : ', case.getContenu())
-        print('COURANT : ', case.getCourant(), case.getCourantChar())
-        case.setCourant('N')
-        print('COURANT CHANGE POUR NORD: ', case.getCourant(), case.getCourantChar())
-        case.setContenu(VIDE)
-        print('CONTENU CHANGE POUR VIDE: ', case.getContenu())
+    print('TEST des fonctions de case.py : ')
+
+    print('Bonnes Valeurs: ')
+    for contenu in 'AZERTYUIOPQSDFGHJKLMLWXCVBN' + ROCHER + VIDE + TRONC:
+        for courant in directions:
+            print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
+            c = Case(contenu, courant)
+            print('Case() : ', c)
+
+            print('estRocher() : ', c.estRocher())
+
+            print('estTronc() : ', c.estTronc())
+
+            print('estVide() : ', c.estVide())
+
+            print('estJoueur() : ', c.estJoueur())
+
+            print('getContenu() : ', c.getContenu())
+
+            print('getCourant() : ', c.getCourant())
+
+            print('getCourantChar() : ', c.getCourantChar())
+
+            print('setContenu() : ', c.setContenu('$'))
+
+            print('setCourant() : ', c.setCourant('N'))
+
+            print('getDirections() : ', c.getDirections())
+
+            print('RE - getContenu() : ', c.getContenu())
+            print('RE - getCourant() : ', c.getCourant())
+            print('RE - getCourantChar() : ', c.getCourantChar())
+            print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ')
+
+    print('Mauvaises Valeurs: ')
+    for contenu in [1, True, [], ()]:
+        for courant in 'AZRTYUIP':
+            print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
+            c = Case(contenu, courant)
+            print('Case() : ', c)
+
+            print('estRocher() : ', c.estRocher())
+
+            print('estTronc() : ', c.estTronc())
+
+            print('estVide() : ', c.estVide())
+
+            print('estJoueur() : ', c.estJoueur())
+
+            print('getContenu() : ', c.getContenu())
+
+            print('getCourant() : ', c.getCourant())
+
+            print('getCourantChar() : ', c.getCourantChar())
+
+            print('setContenu() : ', c.setContenu('$'))
+
+            print('setCourant() : ', c.setCourant('X'))
+
+            print('getDirections() : ', c.getDirections())
+
+            print('RE - getContenu() : ', c.getContenu())
+            print('RE - getCourant() : ', c.getCourant())
+            print('RE - getCourantChar() : ', c.getCourantChar())
+            print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ')
