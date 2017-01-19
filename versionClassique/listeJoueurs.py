@@ -65,7 +65,7 @@ def retirerJoueur(joueurs, nom):
     """
     Cette fonction retire un joueur de la liste
     Si le joueur n'y était pas elle ne fait rien
-    Si je joueur etait lejoueur courant, passe son tour au suivant.
+    Si je joueur etait le joueur courant, passe son tour au suivant.
     Attention si la liste devient vide il n'y a plus de joueur courant
     :param joueurs: dictionnaire. Retour de la fonction ListeJoueurs()
     :param nom:  string. nom du joueur
@@ -82,6 +82,7 @@ def retirerJoueur(joueurs, nom):
         i += 1
     if joueurs['Actifs'] == []:
         joueurs['Courant'] = None
+    print('RETIRER : ', getJoueursActifs(joueurs), getJoueurCourant(joueurs))
 
 
 def getNbJoueurs(joueurs):
@@ -161,7 +162,9 @@ def joueurSuivant(joueurs):
     :return: None. Modifie joueurs
     """
     indice_courant = indiceJoueur(joueurs, getNom(joueurs['Courant']))
-    joueurs['Courant'] = joueurs['Actifs'][(indice_courant + 1) % getNbJoueurs(joueurs)]
+
+    if getNbJoueurs(joueurs)>0:
+        joueurs['Courant'] = joueurs['Actifs'][(indice_courant + 1) % getNbJoueurs(joueurs)]
 
 
 ########################################################################################################################
