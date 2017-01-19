@@ -87,7 +87,7 @@ def getNProchainsGH(grille, lig, col, direction, n=3):
 
     vx, vy = incDirectionGH(direction)
 
-    # On regarde le prochain pas
+   # On regarde le prochain pas
     lig += vx
     col += vy
 
@@ -98,7 +98,6 @@ def getNProchainsGH(grille, lig, col, direction, n=3):
         if (estPosGH(grille, x_a_i_pas, y_a_i_pas)):
             valeur = grille[(x_a_i_pas,y_a_i_pas)]
             liste_NProchains.append(valeur)
-
     return liste_NProchains
 
 

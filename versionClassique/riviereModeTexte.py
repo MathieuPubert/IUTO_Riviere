@@ -24,8 +24,8 @@ def afficherClassement(jeu):
     classement = getClassement(jeu)
     print("CLASSEMENT")
     print("----------")
-    for i in range(getNbJoueurs(classement)):
-        print(i + 1, '->', getNom(getJoueurI(classement, i)))
+    for i in range(len(classement)):
+        print(i + 1, '->', getNom(classement[i]))
 
 
 # cette fonction permet de choisir des joueurs parmi la liste de joueurs possibles
@@ -70,7 +70,7 @@ def jouerUnePartie(jeu):
             if estHumain(joueurCourant):
                 direction = saisirDirection()
             else:
-                direction = choixDirectionAlea(jeu)
+                direction = choixDirection(jeu)
             attenteDirection = False
         else:
             if getNbCoupsRestants(jeu) == 0:

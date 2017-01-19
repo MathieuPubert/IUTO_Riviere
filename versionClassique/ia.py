@@ -29,6 +29,7 @@ def marquage(riviere, lig, col):
 def choixDirection(jeu):
     r = getRiviere(jeu)
     marque = marquage(r, getNbLigR(r), getColArrivee(r))
+    #afficheGH(marque)
     (lig, col) = getPosJoueurCourant(jeu)
     listeDirectionVerif = []
     direction = {"S": getValGH(marque, lig+2, col), "SO": getValGH(marque, lig+1, col-1),
@@ -40,6 +41,7 @@ def choixDirection(jeu):
 
     for a, b in direction.items():
         if b == min(listeDirectionVerif):
+            print('Je choisis : ',a, listeDirectionVerif)
             return a
 
 

@@ -195,7 +195,7 @@ class RiviereGraphique(object):
 
         self.afficherMessage(3, msg)
         self.afficherMessage(5, "CLASSEMENT")
-        for i in range(getNbJoueurs(self.classement)):
+        for i in range(len(self.classement)):
             self.afficherMessage(6 + i, str(i + 1) + '. @img@ ' + getNom(getJoueurI(self.classement, i)),
                                  [self.surfJoueur[getRepresentation(getJoueurI(self.classement, i))]])
 

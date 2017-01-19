@@ -166,8 +166,10 @@ def ajouterClassement(jeu, nomJoueur):
     :return: None. Modifie jeu
     """
     jeu["Classement"].append(getJoueurI(getJoueursJ(jeu), indiceJoueur(getJoueursJ(jeu), nomJoueur)))
+
     retirerJoueur(getJoueursJ(jeu), nomJoueur)
 
+    viderArrivee(getRiviere(jeu))
 
 def joueurSuivantJ(jeu):
     """
@@ -198,9 +200,11 @@ def verifDirection(jeu, direction):
     if direction in getDirections():
         x, y = getPosJoueurCourant(jeu)
         vx, vy = incDirectionGH(direction)
+
         dx,dy = (x+vx, y+vy)
+
         res = DIRECTION_NON_AUTORISEE
-        if estPosR(getRiviere(jeu), dx, dy):
+        if estPosR(getRiviere(jeu), dx, dy) :
             if deplacementAutorise(getRiviere(jeu), x, y, direction):
                 # On a le feu vert, on peut y aller
                 res = DIRECTION_OK
@@ -239,9 +243,10 @@ def positionerJoueurCourant(jeu):
     :param jeu: retour de la fonction Jeu()
     :return: None. modifie jeu
     """
-    jx, jy = getPosJoueurCourant(jeu)
-    if not estPosR(getRiviere(jeu), jx, jy):
-        setContenuR(getRiviere(jeu), 0, getColDepart(getRiviere(jeu)), getRepresentation(getJoueurCourantJ(jeu)))
+    if getJoueurCourantJ(jeu) is not None:
+        jx, jy = getPosJoueurCourant(jeu)
+        if not estPosR(getRiviere(jeu), jx, jy):
+            setContenuR(getRiviere(jeu), 0, getColDepart(getRiviere(jeu)), getRepresentation(getJoueurCourantJ(jeu)))
 
 def finirDeplacement(jeu):
     """
@@ -265,10 +270,14 @@ def finirDeplacement(jeu):
     est_stable=True
     chaine_bilan =""
 
+    # Si il y a des trucs dans les courants
     if getMinADeplacer(getRiviere(jeu)) != (-1,-1):
         elemx,elemy = getMinADeplacer(getRiviere(jeu))
         direction = getCourantR(getRiviere(jeu), elemx, elemy)
-        deplacer(getRiviere(jeu), x, y, direction)
+
+        print('Gestion Courants : deplacement de ({0},{1}) vers {2} demandé'.format(elemx, elemy, direction))
+        deplacer(getRiviere(jeu), elemx, elemy, direction)
+        est_stable=False
 
         #si ça a fait arriver un joueur
         winner = joueurArrive(getRiviere(jeu))
@@ -276,10 +285,13 @@ def finirDeplacement(jeu):
             chaine_bilan = 'Le joueur {0} est arrive'.format(winner)
             ajouterClassement(jeu, winner)
 
-    if est_stable and getNbJoueursJ(jeu):
+    # On passe au joueur suivant si il y en a un.
+    if getNbJoueursJ(jeu)>0:
+        joueurSuivantJ(jeu)
+
+    else:
         chaine_bilan = "La partie est terminée"
-
-
+        viderJoueurs(getJoueursJ(jeu))
 
     return (est_stable, chaine_bilan)
 
@@ -311,15 +323,17 @@ def jouerDirection(jeu, direction):
     sumstr = ""
     verif = verifDirection(jeu, direction)
     enleverCoupsRestants(jeu) # De base, le joueur depense un point de deplacement
-
     jx, jy= getPosJoueurCourant(jeu)
+
     # Si on peut se deplacer
     if verif == DIRECTION_OK:
 
         # Si le joueur decide de ne pas bouger
         if direction == 'X':
-            sumstr = "le joueur xx renonce à ses derniers déplacements"
+            sumstr = "le joueur {0} renonce à ses derniers déplacements".format(getNom(getJoueurCourantJ(jeu)))
+
             enleverTousCoupsRestants(jeu)
+
 
         # Si le joueur bouge
         else:
@@ -328,20 +342,21 @@ def jouerDirection(jeu, direction):
 
             # si il est arrivé :
             if joueurArrive(getRiviere(jeu)) is not None:
-                sumstr = "Le joueur xx est arrivé"
-                ajouterClassement(jeu, joueur)
 
-                print("Le tour se termine car le joueur xx est arrivé")
-
-            # On vire tout ce qui se trouve sur l'arrivée
-            else:
-                viderArrivee(getRiviere(jeu))
+                sumstr = "Le joueur {0} est arrivé".format(getNom(getJoueurCourantJ(jeu)))
+                print("Le tour se termine car le joueur {0} est arrivé".format(getNom(getJoueurCourantJ(jeu))))
+                ajouterClassement(jeu, getNom(getJoueurCourantJ(jeu)))
+                joueurSuivantJ(jeu)
 
     elif verif == DIRECTION_NON_AUTORISEE :
         sumstr="Attention direction incorrecte"
 
-    if getNbCoupsRestants(jeu) == 0:
-        joueurSuivantJ(jeu)
+    elif verif == PAS_UNE_DIRECTION:
+        sumstr = "Ceci n'est pas une direction"
+
+
+    # On vire tout ce qui se trouve sur l'arrivée
+    viderArrivee(getRiviere(jeu))
 
     return sumstr
 

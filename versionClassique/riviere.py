@@ -128,7 +128,7 @@ def getNbObstacles(riviere, lig, col, direction, n=3):
     listeVal = getNProchainsGH(getGrille(riviere), lig, col, direction, n)
     i = 0
     nbobst=0
-    while i < len(listeVal) and nbobst<3:
+    while i < len(listeVal):
         if getContenu(listeVal[i]) != VIDE:
             nbobst += 1
         i+=1
@@ -149,11 +149,14 @@ def joueurArrive(r):
 # cette fonction verifie que le déplacement partant de la case en position (lig,col)
 # en direction de direction est bien possible
 def deplacementAutorise(riviere, lig, col, direction):
+
     autorise = False
     vx,vy = incDirectionGH(direction)
-    if getNbObstacles(riviere, lig, col, direction) <3:
-        if estPosR(riviere, lig+vx, col+vy):
-            autorise = True
+    if getNbObstacles(riviere, lig, col, direction,2)<=2:
+        if estPosR(riviere, lig+vx, col+vy) :
+            if not estRocher(getCase(riviere,lig+vx, col+vy)):
+                autorise = True
+
     return autorise
 
 
@@ -162,8 +165,10 @@ def deplacementAutorise(riviere, lig, col, direction):
 # On considère que lorsqu'on appelle la fonction le déplacement est possible
 # La fonction retourne la représentation du joueur qui se trouve sur la case d'arrivée
 # si il y en a un et None sinon
-def deplacer(riviere, lig, col, direction):
+def deplacer(riviere, lig, col, direction, it=0):
     joueur = None
+    it+=1
+
     vx, vy = incDirectionGH(direction)
 
     if getContenuR(riviere, lig+vx, col+vy) == VIDE:
@@ -171,10 +176,16 @@ def deplacer(riviere, lig, col, direction):
         setContenuR(riviere, lig, col, VIDE)
 
     else:
-        if getContenuR(riviere, lig+vx, col+vy) != ROCHER:
-            #ce qu'il y a devant se deplace si il peut
-            if deplacementAutorise(riviere, lig+vx, col+vy, direction):
-                deplacer(riviere, lig+vx, col+vy, direction)
+        if it<3:
+            if getContenuR(riviere, lig+vx, col+vy) != ROCHER:
+                print('Je demande à ({0},{1}) de se deplacer vers {2}'.format(lig+vx,col+vy,direction))
+                #ce qu'il y a devant se deplace si il peut
+                if direction != 'X':
+                    if deplacementAutorise(riviere, lig+vx, col+vy, direction) :
+                        deplacer(riviere, lig+vx, col+vy, direction, it)
+
+    if joueurArrive(riviere):
+        joueur = getContenuR(riviere, getNbLigR(riviere), getColArrivee(riviere))
 
     return joueur
 
@@ -185,12 +196,14 @@ def deplacer(riviere, lig, col, direction):
 # si aucun objet n'est à dans ce cas la fonction retourne (-1,-1)
 def getMinADeplacer(r):
     pos=(-1,-1)
-    for x in getNbLigR(r):
-        for y in getNbColR(r):
-            if getCourantR(r, x, y):
-                if getContenuR(r, x, y) != VIDE:
-                    if getContenuR(r, x, y) != ROCHER:
-                        pos=(x,y)
+    for x in range(getNbLigR(r)):
+        for y in range(getNbColR(r)):
+            if estPosR(r, x, y):
+                if getCourantR(r, x, y) != 'X':
+                    if getContenuR(r, x, y) != VIDE:
+                        if getContenuR(r, x, y) != ROCHER:
+                            pos=(x,y)
+
     return pos
 
 
