@@ -39,6 +39,7 @@ def Jeu(prefixe, ficJoueurs, ficRiviere):
              "Deplacements": 0,
              "RNG": random.randint}
 
+
     return d_jeu
 
 
@@ -49,9 +50,8 @@ def initJeu(jeu):
     :param jeu: retour de la fonction Jeu()
     :return: None. Modifie jeu
     """
-    setContenuR(getRiviere(jeu), 0, getColDepart(getRiviere(jeu)), getJoueurCourant(getJoueursJ(jeu)))
+    setContenuR(getRiviere(jeu), 0, getColDepart(getRiviere(jeu)), getRepresentation(getJoueurCourant(getJoueursJ(jeu))))
     jeu["Deplacements"] = jeu["RNG"](1, 5)
-
 
 def getRiviere(jeu):
     """
@@ -75,7 +75,7 @@ def ajouterJoueurJ(jeu, joueur):
     """
     Permet d'ajouter un nouveau joueur participant à la course
     :param jeu: retour de la fonction Jeu()
-    :param joueur: retour de la fonction Joueu()
+    :param joueur: retour de la fonction Joueur()
     :return: None. Modifie jeu
     """
     ajouterJoueur(getJoueursJ(jeu), getNom(joueur), estHumain(joueur))
@@ -85,7 +85,7 @@ def getJoueursJ(jeu):
     """
     Permet d'obtenir la liste des joueurs participant à la course
     :param jeu: retour de la fonction Jeu()
-    :return: liste [Joueur()]. liste des joueurs actifs
+    :return: structure listeJoueurs. liste des joueurs
     """
     return jeu["Joueurs"]
 
@@ -96,16 +96,16 @@ def getNbJoueursJ(jeu):
     :param jeu: retour de la fonction Jeu()
     :return: Integer. nombre de joueurs actifs
     """
-    return len(getJoueursJ(jeu))
+    return getNbJoueurs(getJoueursJ(jeu))
 
 
 def getJoueurCourantJ(jeu):
     """
     Permet de connaitre le nom du joueur courant
     :param jeu: retour de la fonction Jeu()
-    :return: Sring. Nom du joueur courant
+    :return: Structure Joueur(). Joueur courant
     """
-    return getNom(getJoueurCourant(getJoueursJ(jeu)))
+    return getJoueurCourant(getJoueursJ(jeu))
 
 
 def getPosJoueur(jeu, joueur):
@@ -115,8 +115,7 @@ def getPosJoueur(jeu, joueur):
     :param joueur : string. nom du joueur
     :return: tuple(int,int). coordonnées du joueur
     """
-
-    return getPositionJoueur(getRiviere(jeu), getRepresentationJoueur(getJoueursPossibles(getJoueursJ(jeu)), joueur))
+    return getPositionJoueur(getRiviere(jeu), getRepresentation(joueur))
 
 
 def getPosJoueurCourant(jeu):
@@ -134,7 +133,10 @@ def getNbCoupsRestants(jeu):
     :param jeu: retour de la fonction Jeu()
     :return: Integer. nombre de deplacements restant au joueur
     """
-    return jeu["Deplacements"]
+    nbcoups = jeu["Deplacements"]
+    if nbcoups<0:
+        nbcoups=0
+    return nbcoups
 
 
 def enleverCoupsRestants(jeu):
@@ -163,6 +165,7 @@ def ajouterClassement(jeu, nomJoueur):
     :param nomJoueur : string. nom d'un joueur
     :return: None. Modifie jeu
     """
+    jeu["Classement"].append(getJoueurI(getJoueursJ(jeu), indiceJoueur(getJoueursJ(jeu), nomJoueur)))
     retirerJoueur(getJoueursJ(jeu), nomJoueur)
 
 
@@ -175,6 +178,10 @@ def joueurSuivantJ(jeu):
     :return:None. modifie jeu
     """
     joueurSuivant(getJoueursJ(jeu))
+    positionerJoueurCourant(jeu)
+    jeu["Deplacements"] = jeu["RNG"](1,5)
+
+
 
 
 def verifDirection(jeu, direction):
@@ -186,21 +193,17 @@ def verifDirection(jeu, direction):
     :param direction: string. Caractère etant clé du dictionnaire directions dans case.py
     :return: PAS_UNE_DIRECTION,soit DIRECTION_NON_AUTORISEE,soit DIRECTION_OK
     """
-    x, y = getPosJoueurCourant(jeu)
-    vx, vy = incDirectionGH(direction)
-
-    # Par defaut
     res = PAS_UNE_DIRECTION
 
-    if estPosR(getRiviere(jeu), x + vx, y + vy):
-
-        # On ne sait pas si cette case est occupée
+    if direction in getDirections():
+        x, y = getPosJoueurCourant(jeu)
+        vx, vy = incDirectionGH(direction)
+        dx,dy = (x+vx, y+vy)
         res = DIRECTION_NON_AUTORISEE
-
-        if deplacementAutorise(getRiviere(jeu), x, y, direction):
-            # On a le feu vert, on peut y aller
-            res = DIRECTION_OK
-
+        if estPosR(getRiviere(jeu), dx, dy):
+            if deplacementAutorise(getRiviere(jeu), x, y, direction):
+                # On a le feu vert, on peut y aller
+                res = DIRECTION_OK
     return res
 
 
@@ -218,8 +221,6 @@ def calculerDirection(jeu, pos):
     vy = y - jy
 
     d_cardinals = {(0, 0): 'X',
-                   (0, 2): 'E',
-                   (0, -2): 'O',
                    (2, 0): 'S',
                    (-2, 0): 'N',
                    (-1, -1): 'NO',
@@ -238,10 +239,9 @@ def positionerJoueurCourant(jeu):
     :param jeu: retour de la fonction Jeu()
     :return: None. modifie jeu
     """
-    if getPosJoueurCourant(jeu) == (-1, -1):
-        setContenuR(getRiviere(jeu), 0, getColDepart(getRiviere(jeu)),
-                    getRepresentation(getJoueurCourant(getJoueursJ(jeu))))
-
+    jx, jy = getPosJoueurCourant(jeu)
+    if not estPosR(getRiviere(jeu), jx, jy):
+        setContenuR(getRiviere(jeu), 0, getColDepart(getRiviere(jeu)), getRepresentation(getJoueurCourantJ(jeu)))
 
 def finirDeplacement(jeu):
     """
@@ -260,24 +260,28 @@ def finirDeplacement(jeu):
     ''                        dans les autres cas
 
     :param jeu: retour de la fonction Jeu()
-    :return: None. modifie jeu
+    :return: tuple(bool,string).
     """
+    est_stable=True
+    chaine_bilan =""
 
-    # pour chaque (x,y)
-    for x in range(getNbLigR(getRiviere(jeu))):
-        for y in range(getNbColR(getRiviere(jeu))):
+    if getMinADeplacer(getRiviere(jeu)) != (-1,-1):
+        elemx,elemy = getMinADeplacer(getRiviere(jeu))
+        direction = getCourantR(getRiviere(jeu), elemx, elemy)
+        deplacer(getRiviere(jeu), x, y, direction)
 
-            if estPosR(getRiviere(jeu), x, y):
+        #si ça a fait arriver un joueur
+        winner = joueurArrive(getRiviere(jeu))
+        if winner is not None:
+            chaine_bilan = 'Le joueur {0} est arrive'.format(winner)
+            ajouterClassement(jeu, winner)
 
-                # si on a un courant autre que fixe dans la case
-                if getCourantR(getRiviere(jeu), x, y) != 'X':
+    if est_stable and getNbJoueursJ(jeu):
+        chaine_bilan = "La partie est terminée"
 
-                    # et que la case contient un element mobile
-                    if not estRocher(getCase(getRiviere(jeu), x, y)):
-                        # alors on le bouge
-                        deplacer(getRiviere(jeu), x, y, getCourantR(getRiviere(jeu), x, y))
-                        # setContenuR(getRiviere(jeu),nouvx,nouvy, getContenuR(getRiviere(jeu, x, y)))
-                        # setContenuR(getRiviere(jeu), x, y, "VIDE")
+
+
+    return (est_stable, chaine_bilan)
 
 
 def jouerDirection(jeu, direction):
@@ -304,10 +308,13 @@ def jouerDirection(jeu, direction):
     :param direction: string. Caractère etant clé du dictionnaire directions dans case.py ou 'W'
     :return: string. phrase d'informations
     """
-    sumstr = 'ATTENTION DIRECTION INCORRECTE'
+    sumstr = ""
+    verif = verifDirection(jeu, direction)
+    enleverCoupsRestants(jeu) # De base, le joueur depense un point de deplacement
 
+    jx, jy= getPosJoueurCourant(jeu)
     # Si on peut se deplacer
-    if verifDirection(jeu, direction) == DIRECTION_OK:
+    if verif == DIRECTION_OK:
 
         # Si le joueur decide de ne pas bouger
         if direction == 'X':
@@ -316,18 +323,25 @@ def jouerDirection(jeu, direction):
 
         # Si le joueur bouge
         else:
-            # On lui enleve un coup
-            enleverCoupsRestants(jeu)
+
+            deplacer(getRiviere(jeu),jx, jy,direction)
 
             # si il est arrivé :
-            if joueurArrive(getRiviere(jeu)):
+            if joueurArrive(getRiviere(jeu)) is not None:
                 sumstr = "Le joueur xx est arrivé"
+                ajouterClassement(jeu, joueur)
 
                 print("Le tour se termine car le joueur xx est arrivé")
 
             # On vire tout ce qui se trouve sur l'arrivée
             else:
                 viderArrivee(getRiviere(jeu))
+
+    elif verif == DIRECTION_NON_AUTORISEE :
+        sumstr="Attention direction incorrecte"
+
+    if getNbCoupsRestants(jeu) == 0:
+        joueurSuivantJ(jeu)
 
     return sumstr
 
@@ -338,37 +352,28 @@ if __name__ == '__main__':
 
     game = Jeu('./data/', 'joueurs.txt', 'riviere1.txt')
 
+    print('ajouterJoueurJ() : ')
+    for (nom, representation) in getJoueursPossibles(getJoueursJ(game)).items():
+        ajouterJoueurJ(game, Joueur(nom, representation, True))
+
     initJeu(game)
 
+    print('TEST des fonctions de jeu.py : ')
 
+    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
+    print('Jeu() : ', game)
 
-    for (nom, representation) in getJoueursPossibles(getJoueursJ(game)).items():
-        ajouterJoueurJ(game, Joueur(nom, representation))
-
-    # print(getPosJoueurCourant(game))
+    print('getRiviere() : ', getRiviere(game))
+    print('getClassement() : ', getClassement(game))
+    print('getJoueursJ() : ', getJoueursJ(game))
+    print('getNbjoueursJ() : ', getNbJoueursJ(game))
+    print('getJoueurCourantJ() : ', getJoueurCourantJ(game))
+    print('getPosJoueur() : ', getPosJoueur(game,getJoueurCourantJ(game) ))
+    print('AVANT PLACEMENT => getPosJoueurCourant() : ', getPosJoueurCourant(game))
+    print('positionerJoueurCourant()')
     positionerJoueurCourant(game)
-    # print(getPosJoueurCourant(game))
+    print('APRES PLACEMENT => getPosJoueurCourant() : ', getPosJoueurCourant(game))
+
+    print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ')
 
 
-    for dir in directions:
-        x, y = getPosJoueurCourant(game)
-        print(getJoueurCourantJ(game))
-        print(getRiviere(game), x, y, dir, sep='\n')
-        deplacer(getRiviere(game), x, y, dir)
-
-    afficheRiviere(getRiviere(game))
-
-    getJoueursJ(game)
-    getNbJoueursJ(game)
-    getPosJoueur(game, 'INFORMATIQUE')
-
-    getNbCoupsRestants(game)
-    enleverCoupsRestants(game)
-    enleverTousCoupsRestants(game)
-    ajouterClassement(game, 'INFORMATIQUE')
-    # joueurSuivantJ(game)
-    verifDirection(game, 'N')
-    calculerDirection(game, (2, 2))
-    positionerJoueurCourant(game)
-    finirDeplacement(game)
-    jouerDirection(game, 'S')

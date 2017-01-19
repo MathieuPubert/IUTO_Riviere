@@ -34,6 +34,7 @@ def choixDirection(jeu):
     for elem in direction:
         if verifDirection(jeu, elem) == DIRECTION_OK:
             listeDirectionVerif.append(direction[elem])
+
     for a, b in direction.items():
         if b == min(listeDirectionVerif):
             return a

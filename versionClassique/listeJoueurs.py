@@ -101,6 +101,14 @@ def getJoueursPossibles(joueurs):
     """
     return joueurs['Possibles']
 
+def getJoueursActifs(joueurs):
+    """
+    Retourne la liste des joueurs en cours de partie
+    :param joueurs:
+    :return: liste[Joueurs()]
+    """
+    return joueurs["Actifs"]
+
 
 def getJoueurCourant(joueurs):
     """
@@ -119,7 +127,7 @@ def getJoueurI(joueurs, i):
     :param i: integer. Indice du joueur dans joueurs['Actifs']
     :return: structure Joueur()
     """
-    return getNom(joueurs['Actifs'][i])
+    return joueurs['Actifs'][i]
 
 
 def getJoueurRep(joueurs, representation):

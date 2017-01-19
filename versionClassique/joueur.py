@@ -33,7 +33,7 @@ def getRepresentation(joueur):
     :return: string. Représentation du joueur
     """
     rep = None
-    if joueur is not None:
+    if joueur is not None and 'Representation' in joueur:
         rep = joueur['Representation']
     return rep
 
